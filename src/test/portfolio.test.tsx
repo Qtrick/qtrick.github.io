@@ -62,19 +62,19 @@ describe('David Fan Portfolio Site', () => {
   it('toggles light/dark theme', () => {
     render(<App />);
 
-    // Default theme is dark
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    // Default theme is warm off-white light theme
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
-    const themeToggleBtn = screen.getByRole('button', { name: /Switch to light theme/i });
+    const themeToggleBtn = screen.getByRole('button', { name: /Switch to dark theme/i });
     fireEvent.click(themeToggleBtn);
 
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-    expect(localStorage.getItem('df_portfolio_theme')).toBe('light');
-
-    // Switch back to dark
-    const darkToggleBtn = screen.getByRole('button', { name: /Switch to dark theme/i });
-    fireEvent.click(darkToggleBtn);
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(localStorage.getItem('df_portfolio_theme')).toBe('dark');
+
+    // Switch back to light
+    const lightToggleBtn = screen.getByRole('button', { name: /Switch to light theme/i });
+    fireEvent.click(lightToggleBtn);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
   });
 
   it('handles email copy with visual feedback', async () => {

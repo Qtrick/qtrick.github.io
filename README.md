@@ -47,5 +47,7 @@ The repository includes a GitHub Actions deployment workflow at [`.github/workfl
 
 To enable automated deployment on GitHub:
 1. In your GitHub repository settings, navigate to **Settings** > **Pages**.
-2. Under **Build and deployment** > **Source**, select **GitHub Actions**.
-3. Pushes to the `main` branch will automatically run tests, typecheck, build, and deploy the site to `https://qtrick.github.io/`.
+2. Under **Build and deployment** > **Source**, choose either:
+   - **GitHub Actions** *(Recommended)*: Pushes to `main` run `.github/workflows/deploy.yml` which validates, builds, and deploys automatically.
+   - **Deploy from a branch**: Select branch `main` and folder `/docs`. The pre-built production static files in `/docs` will be served directly.
+3. Your site will be live at `https://qtrick.github.io/`.

@@ -27,11 +27,11 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   return (
     <section className="hero-section" id="top" aria-label="Introduction">
-      <div className="site-wrapper hero-container">
+      <div className="site-wrapper hero-grid">
         <div className="hero-content">
-          <div className="hero-eyebrow-container">
-            <span className="hero-status-pill">
-              <span className="status-dot"></span>
+          <div className="hero-badge-wrap">
+            <span className="hero-badge">
+              <span className="hero-badge-dot" aria-hidden="true"></span>
               Freshman · UMass Amherst
             </span>
           </div>
@@ -39,60 +39,59 @@ export const Hero: React.FC<HeroProps> = ({
           <h1 className="hero-name">{name}</h1>
           <p className="hero-headline">{headline}</p>
 
-          <p className="hero-subheadline">{subheadline}</p>
-          <p className="hero-bio">{bioLine}</p>
+          <p className="hero-bio">{subheadline}</p>
+          <p className="hero-subbio">{bioLine}</p>
 
           <div className="hero-actions">
-            <a href={primaryCta.href} className="btn btn-primary hero-btn">
-              {primaryCta.text}
-              <ArrowDown size={15} aria-hidden="true" />
+            <a href={primaryCta.href} className="btn btn-primary hero-primary-btn">
+              <span>{primaryCta.text}</span>
+              <ArrowDown size={14} aria-hidden="true" />
             </a>
 
             <a
               href={secondaryCta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-secondary hero-btn"
+              className="btn btn-secondary hero-secondary-btn"
             >
-              {secondaryCta.text}
-              <ExternalLink size={14} aria-hidden="true" />
+              <span>{secondaryCta.text}</span>
+              <ExternalLink size={13} aria-hidden="true" />
             </a>
           </div>
         </div>
 
-        {/* Restrained Architectural Map Motif */}
-        <div className="hero-diagram" aria-hidden="true">
-          <div className="diagram-card">
-            <div className="diagram-node node-central">
-              <span className="node-eyebrow">Builder</span>
-              <span className="node-main">David Fan</span>
-              <span className="node-sub">UMass '26 · Biology</span>
+        {/* Right Column: Restrained System Architecture Motif */}
+        <div className="hero-visual-col" aria-label="Core Projects Overview">
+          <div className="hero-architecture-card">
+            <div className="architecture-header">
+              <span className="arch-tag">System Map</span>
+              <div className="arch-title">David Fan</div>
+              <div className="arch-subtitle">UMass '26 · Biology &amp; Systems</div>
             </div>
 
-            <div className="diagram-connector">
-              <div className="connector-line"></div>
-              <div className="connector-junction"></div>
-            </div>
-
-            <div className="diagram-branches">
-              <a href="#project-prebase" className="branch-card branch-prebase">
-                <div className="branch-header">
-                  <span className="branch-pill">Featured 01</span>
-                  <span className="branch-status">Active</span>
+            <div className="architecture-tree">
+              <a href="#project-prebase" className="arch-branch">
+                <span className="branch-indicator">01</span>
+                <div className="branch-info">
+                  <span className="branch-name">
+                    PreBase
+                    <ArrowDown size={12} aria-hidden="true" style={{ transform: 'rotate(-45deg)' }} />
+                  </span>
+                  <span className="branch-desc">Codebase-mapping &amp; spatial architecture IDE</span>
+                  <span className="branch-tech">Code-OSS · TypeScript · Electron · Graphs</span>
                 </div>
-                <h2 className="branch-title">PreBase</h2>
-                <p className="branch-desc">Codebase mapping & spatial architecture IDE</p>
-                <span className="branch-tech">Code-OSS · Electron · Graphs</span>
               </a>
 
-              <a href="#project-coreside" className="branch-card branch-coreside">
-                <div className="branch-header">
-                  <span className="branch-pill">Featured 02</span>
-                  <span className="branch-status">MVP</span>
+              <a href="#project-coreside" className="arch-branch">
+                <span className="branch-indicator">02</span>
+                <div className="branch-info">
+                  <span className="branch-name">
+                    Coreside
+                    <ArrowDown size={12} aria-hidden="true" style={{ transform: 'rotate(-45deg)' }} />
+                  </span>
+                  <span className="branch-desc">Personal software environment with persistent tools</span>
+                  <span className="branch-tech">Tauri 2 · Rust · React · SQLite</span>
                 </div>
-                <h2 className="branch-title">Coreside</h2>
-                <p className="branch-desc">Personal software with trusted declarative tools</p>
-                <span className="branch-tech">Tauri 2 · Rust · SQLite</span>
               </a>
             </div>
           </div>

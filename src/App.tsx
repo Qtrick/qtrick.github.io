@@ -13,8 +13,8 @@ export const App: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const saved = localStorage.getItem('df_portfolio_theme');
     if (saved === 'dark' || saved === 'light') return saved;
-    // Default to dark mode for modern craft aesthetic
-    return 'dark';
+    // Default to warm off-white editorial theme
+    return 'light';
   });
 
   useEffect(() => {
