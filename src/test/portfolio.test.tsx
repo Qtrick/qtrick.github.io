@@ -12,51 +12,49 @@ describe('David Fan Portfolio Site', () => {
   it('renders identity, headline, and primary navigation', () => {
     render(<App />);
 
-    // Check main heading identity
-    const mainHeading = screen.getByRole('heading', { level: 1, name: 'David Fan' });
-    expect(mainHeading).toBeInTheDocument();
-    expect(screen.getByText('Biology student. Builder.')).toBeInTheDocument();
+    // Check main heading and headline
+    const headline = screen.getByRole('heading', { level: 1 });
+    expect(headline).toHaveTextContent(siteContent.hero.headline);
+    expect(screen.getAllByText(siteContent.hero.name).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText(siteContent.hero.subline)).toBeInTheDocument();
 
     // Check navigation items
     expect(screen.getByRole('link', { name: 'Work' })).toHaveAttribute('href', '#work');
-    expect(screen.getByRole('link', { name: 'Now' })).toHaveAttribute('href', '#now');
     expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '#about');
-    expect(screen.getByRole('link', { name: 'Outside' })).toHaveAttribute('href', '#outside');
-    expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '#contact');
+    const githubLinks = screen.getAllByRole('link', { name: /GitHub/i });
+    expect(githubLinks.length).toBeGreaterThanOrEqual(1);
+    expect(githubLinks[0]).toHaveAttribute('href', 'https://github.com/Qtrick');
   });
 
-  it('renders featured projects from centralized siteContent (PreBase and Coreside)', () => {
+  it('toggles between PreBase and Coreside projects with tabs', () => {
     render(<App />);
 
+    // By default, PreBase is active
     expect(screen.getByRole('heading', { level: 3, name: 'PreBase' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 3, name: 'Coreside' })).toBeInTheDocument();
-    expect(screen.getByText('Codebase Mapping IDE')).toBeInTheDocument();
-    expect(screen.getByText('Personal Software Environment')).toBeInTheDocument();
+    expect(screen.getByText(/A codebase-mapping IDE/i)).toBeInTheDocument();
+    expect(screen.getByText('Code-OSS')).toBeInTheDocument();
 
-    // Check technology tags
-    expect(screen.getByText('Code-OSS 1.128')).toBeInTheDocument();
+    // Find tab buttons
+    const prebaseTab = screen.getByRole('tab', { name: 'PreBase' });
+    const coresideTab = screen.getByRole('tab', { name: 'Coreside' });
+
+    expect(prebaseTab).toHaveAttribute('aria-selected', 'true');
+    expect(coresideTab).toHaveAttribute('aria-selected', 'false');
+
+    // Switch to Coreside
+    fireEvent.click(coresideTab);
+
+    expect(coresideTab).toHaveAttribute('aria-selected', 'true');
+    expect(prebaseTab).toHaveAttribute('aria-selected', 'false');
+    expect(screen.getByRole('heading', { level: 3, name: 'Coreside' })).toBeInTheDocument();
+    expect(screen.getByText(/A desktop environment where conversations turn into persistent tools/i)).toBeInTheDocument();
     expect(screen.getByText('Tauri 2')).toBeInTheDocument();
     expect(screen.getByText('Rust')).toBeInTheDocument();
-  });
 
-  it('expands project architecture deep dive on toggle', async () => {
-    render(<App />);
-
-    const archToggleButtons = screen.getAllByRole('button', {
-      name: /Technical Architecture/i,
-    });
-    expect(archToggleButtons.length).toBeGreaterThan(0);
-
-    // Expand PreBase deep dive
-    fireEvent.click(archToggleButtons[0]);
-
-    // Check that deep dive content is now revealed
-    await waitFor(() => {
-      expect(screen.getByText(/Why I Built This/i)).toBeInTheDocument();
-      expect(screen.getByText(/What I Built & Contributed/i)).toBeInTheDocument();
-      expect(screen.getByText(/Key Architectural Decisions/i)).toBeInTheDocument();
-      expect(screen.getByText(/Strict Subsystem Boundaries/i)).toBeInTheDocument();
-    });
+    // Switch back to PreBase
+    fireEvent.click(prebaseTab);
+    expect(prebaseTab).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('heading', { level: 3, name: 'PreBase' })).toBeInTheDocument();
   });
 
   it('toggles light/dark theme', () => {
@@ -92,21 +90,19 @@ describe('David Fan Portfolio Site', () => {
 
     fireEvent.click(copyBtn);
 
-    expect(writeTextMock).toHaveBeenCalledWith(siteContent.contact.email);
+    expect(writeTextMock).toHaveBeenCalledWith(siteContent.about.email);
     await waitFor(() => {
       expect(screen.getByText('Copied')).toBeInTheDocument();
     });
   });
 
-  it('contains accessible anchors and correct heading hierarchy', () => {
+  it('contains accessible anchors and correct navigation targets', () => {
     render(<App />);
 
     // Verify sections have corresponding IDs for in-page navigation
     expect(document.getElementById('work')).toBeInTheDocument();
-    expect(document.getElementById('now')).toBeInTheDocument();
     expect(document.getElementById('about')).toBeInTheDocument();
-    expect(document.getElementById('outside')).toBeInTheDocument();
-    expect(document.getElementById('contact')).toBeInTheDocument();
+    expect(document.getElementById('main-content')).toBeInTheDocument();
 
     // Verify skip to content link exists and points to main-content
     const skipLink = screen.getByText('Skip to main content');

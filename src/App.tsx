@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { siteContent } from './content/siteContent';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { SelectedWork } from './components/SelectedWork';
-import { CurrentFocus } from './components/CurrentFocus';
-import { About } from './components/About';
-import { OutsideSoftware } from './components/OutsideSoftware';
-import { Contact } from './components/Contact';
+import { WorkSection } from './components/WorkSection';
+import { AboutSection } from './components/AboutSection';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
@@ -37,13 +34,12 @@ export const App: React.FC = () => {
         Skip to main content
       </a>
 
-      {/* Global Header */}
+      {/* Global Minimal Header */}
       <Header
         ownerName={siteContent.hero.name}
         navigation={siteContent.navigation}
         theme={theme}
         onToggleTheme={toggleTheme}
-        githubUrl="https://github.com/Qtrick"
       />
 
       {/* Main Content Sections */}
@@ -51,55 +47,25 @@ export const App: React.FC = () => {
         <Hero
           name={siteContent.hero.name}
           headline={siteContent.hero.headline}
-          subheadline={siteContent.hero.subheadline}
-          bioLine={siteContent.hero.bioLine}
-          primaryCta={siteContent.hero.primaryCta}
-          secondaryCta={siteContent.hero.secondaryCta}
+          subline={siteContent.hero.subline}
+          links={siteContent.hero.links}
         />
 
-        <SelectedWork
-          sectionTitle={siteContent.featuredProjects.sectionTitle}
-          sectionEyebrow={siteContent.featuredProjects.sectionEyebrow}
-          sectionDescription={siteContent.featuredProjects.sectionDescription}
-          projects={siteContent.featuredProjects.items}
+        <WorkSection
+          sectionTitle={siteContent.work.sectionTitle}
+          projects={siteContent.work.projects}
         />
 
-        <CurrentFocus
-          sectionTitle={siteContent.now.sectionTitle}
-          sectionEyebrow={siteContent.now.sectionEyebrow}
-          intro={siteContent.now.intro}
-          focusList={siteContent.now.focusList}
-        />
-
-        <About
+        <AboutSection
           sectionTitle={siteContent.about.sectionTitle}
-          sectionEyebrow={siteContent.about.sectionEyebrow}
-          paragraphs={siteContent.about.paragraphs}
-        />
-
-        <OutsideSoftware
-          sectionTitle={siteContent.outside.sectionTitle}
-          sectionEyebrow={siteContent.outside.sectionEyebrow}
-          intro={siteContent.outside.intro}
-          items={siteContent.outside.items}
-        />
-
-        <Contact
-          sectionTitle={siteContent.contact.sectionTitle}
-          sectionEyebrow={siteContent.contact.sectionEyebrow}
-          headline={siteContent.contact.headline}
-          body={siteContent.contact.body}
-          email={siteContent.contact.email}
-          socials={siteContent.contact.socials}
+          bio={siteContent.about.bio}
+          email={siteContent.about.email}
+          links={siteContent.about.links}
         />
       </main>
 
-      {/* Global Footer */}
-      <Footer
-        ownerName={siteContent.hero.name}
-        copyright="2026"
-        links={siteContent.contact.socials}
-      />
+      {/* Minimal Footer */}
+      <Footer copyright={siteContent.footer.copyright} />
     </div>
   );
 };
