@@ -8,6 +8,8 @@ interface AboutSectionProps {
   bio: string[];
   email: string;
   links: SocialLink[];
+  enabled?: boolean;
+  onRevealed?: () => void;
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({
@@ -15,8 +17,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   bio,
   email,
   links,
+  enabled = true,
+  onRevealed,
 }) => {
-  const { ref, isRevealed } = useScrollReveal<HTMLElement>();
+  const { ref, isRevealed } = useScrollReveal<HTMLElement>({
+    enabled,
+    onReveal: onRevealed,
+  });
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = async () => {
@@ -25,7 +32,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback
       window.location.href = `mailto:${email}`;
     }
   };
@@ -34,14 +40,14 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     <section
       ref={ref}
       id="about"
-      className={`about-section reveal-on-scroll ${isRevealed ? 'is-revealed' : ''}`}
+      className={`about-section ${isRevealed ? 'is-revealed' : ''}`}
       aria-label={sectionTitle}
     >
       <div className="site-wrapper">
         <div className="about-container">
-          <h2 className="about-title">{sectionTitle}</h2>
+          <h2 className="about-title reveal-item about-title-item">{sectionTitle}</h2>
 
-          <div className="about-bio-text">
+          <div className="about-bio-text reveal-item about-text-item">
             {bio.map((paragraph, idx) => (
               <p key={idx} className="about-paragraph">
                 {paragraph}
@@ -49,7 +55,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             ))}
           </div>
 
-          <div className="about-links-row">
+          <div className="about-links-row reveal-item about-links-item">
             <div className="about-social-links">
               {links.map((link) => (
                 <a

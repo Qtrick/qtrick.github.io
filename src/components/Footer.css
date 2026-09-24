@@ -1,19 +1,32 @@
-/* Minimal Footer Styles */
-
 .site-footer {
-  padding: 2rem 0 3rem;
-  border-top: 1px solid var(--border-subtle);
+  padding: clamp(2.5rem, 4vh + 1.25rem, 4.5rem) 0 clamp(3.5rem, 5vh + 1.75rem, 6rem);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 250ms,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 250ms;
+}
+
+.site-footer.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .footer-inner {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
 }
 
-.footer-copyright {
-  font-size: 0.8125rem;
+.copyright-text {
+  font-size: clamp(0.775rem, 0.2vw + 0.72rem, 0.9rem);
   color: var(--text-muted);
+  font-family: var(--font-mono);
   margin: 0;
-  letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

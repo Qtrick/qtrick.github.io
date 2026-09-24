@@ -1,191 +1,125 @@
-/* Work Section Styles */
+/* Work Section Styles - Simple Elegant List */
 
 .work-section {
-  padding: 2.25rem 0 1.75rem;
+  padding: clamp(2.5rem, 5vh + 1rem, 4.5rem) 0 clamp(2rem, 3.5vh + 0.75rem, 3.5rem);
   border-top: 1px solid var(--border-subtle);
 }
 
-.work-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
 .work-title {
-  font-size: 1.375rem;
+  font-size: clamp(0.8125rem, 0.25vw + 0.75rem, 0.9375rem);
   font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 clamp(1.75rem, 2.5vh, 2.5rem) 0;
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
-}
-
-/* Toggle Tabs */
-.project-toggle {
-  display: inline-flex;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  gap: 3px;
-}
-
-.toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  padding: 0.35rem 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.toggle-btn:hover {
-  color: var(--text-primary);
-}
-
-.toggle-btn.active {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  font-weight: 600;
-}
-
-/* Stable Project Display Panel with Smooth Transition */
-.project-display-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.125rem;
-  min-height: 480px;
+  gap: clamp(2rem, 3.5vh + 0.75rem, 3.25rem);
 }
 
-.project-display-panel.is-animating {
-  animation: projectFadeSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes projectFadeSlide {
-  0% {
-    opacity: 0.2;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .project-display-panel.is-animating {
-    animation: none !important;
-  }
-}
-
-.project-visual-wrapper {
+.project-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
 }
 
-.project-meta-wrapper {
+.project-item-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-}
-
-.project-header-row {
-  display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: clamp(0.6rem, 1vw, 0.9rem);
+  margin-bottom: clamp(0.3rem, 0.6vh, 0.5rem);
 }
 
 .project-name {
-  font-size: 1.375rem;
+  font-size: clamp(1.1875rem, 0.6vw + 1rem, 1.5rem);
   font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   margin: 0;
 }
 
-.project-role-badge {
-  font-size: 0.8125rem;
+.project-descriptor {
+  font-size: clamp(0.8125rem, 0.25vw + 0.75rem, 0.95rem);
   color: var(--text-muted);
   font-weight: 450;
 }
 
-.project-tagline {
-  font-size: 1.0625rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.45;
-  margin: 0;
-}
-
 .project-description {
-  font-size: 0.9375rem;
+  font-size: clamp(0.9375rem, 0.4vw + 0.82rem, 1.15rem);
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 720px;
+  line-height: 1.62;
+  margin: 0 0 clamp(0.6rem, 1vh, 0.85rem) 0;
+  max-width: min(100%, 68ch);
 }
 
-.project-footer-row {
+.project-link-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.75rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.project-tech-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tech-tag {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  background: var(--tag-bg);
-  border: 1px solid var(--tag-border);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-weight: 450;
 }
 
 .project-github-link {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: clamp(0.875rem, 0.3vw + 0.8rem, 1.05rem);
+  font-weight: 500;
   color: var(--text-primary);
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: opacity var(--transition-fast);
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--border-strong);
+  transition: all var(--transition-fast);
 }
 
 .project-github-link:hover {
-  opacity: 0.7;
+  border-bottom-color: var(--text-primary);
+  opacity: 0.75;
+}
+
+/* Deterministic Reveal Sequence: Work heading -> PreBase -> Coreside */
+.work-section .reveal-item {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.work-section.is-revealed .work-title-item {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0ms;
+}
+
+.work-section.is-revealed .project-item-1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 100ms;
+}
+
+.work-section.is-revealed .project-item-2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-section .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 @media (max-width: 640px) {
   .work-section {
-    padding: 2.25rem 0 2rem;
+    padding: 2.5rem 0 2rem;
   }
 
-  .work-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  .project-display-panel {
-    min-height: auto;
+  .project-list {
+    gap: 1.875rem;
   }
 }

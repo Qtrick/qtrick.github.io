@@ -11,6 +11,18 @@
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-normal);
+  animation: headerEnter 0.5s var(--ease-out) forwards;
+}
+
+@keyframes headerEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header-scrolled {
@@ -21,11 +33,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 52px;
+  height: clamp(52px, 3vh + 30px, 68px);
 }
 
 .site-logo {
-  font-size: 0.9375rem;
+  font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.125rem);
   font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
@@ -39,14 +51,14 @@
 .nav-list {
   display: flex;
   list-style: none;
-  gap: 1.25rem;
+  gap: clamp(1rem, 1.8vw, 1.75rem);
   align-items: center;
   margin: 0;
   padding: 0;
 }
 
 .nav-link {
-  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 0.25vw + 0.8rem, 1.05rem);
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 450;
@@ -58,15 +70,15 @@
 }
 
 .external-arrow {
-  font-size: 0.75rem;
+  font-size: clamp(0.75rem, 0.2vw + 0.7rem, 0.875rem);
 }
 
 .theme-toggle-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: clamp(28px, 1.2vw + 24px, 34px);
+  height: clamp(28px, 1.2vw + 24px, 34px);
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -78,6 +90,12 @@
 
 .theme-toggle-btn:hover {
   color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    animation: none !important;
+  }
 }
 
 @media (max-width: 480px) {

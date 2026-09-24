@@ -32,23 +32,14 @@ export const siteContent: SiteContent = {
       {
         id: 'prebase',
         name: 'PreBase',
-        tagline: 'An editor that maps out codebases visually.',
-        description:
-          'I wanted a better way to see how files and functions connect while reading code. Built on Code-OSS, PreBase turns code relationships into an interactive map right inside the editor.',
-        role: 'Open source',
-        status: 'In progress',
-        technologies: ['TypeScript', 'Code-OSS', 'Electron', 'Graphs'],
+        description: 'A codebase mapping IDE for seeing how software connects.',
         githubUrl: 'https://github.com/Qtrick/prebasecode',
       },
       {
         id: 'coreside',
         name: 'Coreside',
-        tagline: 'A desktop app that turns plain text into little tools.',
         description:
-          'You describe what you need, like a water tracker, a checklist, or a simple calculator. Coreside turns that prompt into an interactive tool that stays saved on your computer.',
-        role: 'Personal project',
-        status: 'In progress',
-        technologies: ['Rust', 'Tauri 2', 'React', 'SQLite'],
+          'A personal software environment where conversations can become useful tools.',
         githubUrl: 'https://github.com/Qtrick/coreside',
       },
     ],
@@ -60,7 +51,7 @@ export const siteContent: SiteContent = {
       'I like figuring out how things work, then trying to build them myself.',
       'Outside of software, I compete on the U.S. Wushu Team.',
     ],
-    email: 'davidwfan26@gmail.com',
+    email: 'dfan@umass.edu',
     links: [
       {
         label: 'GitHub',
@@ -71,11 +62,6 @@ export const siteContent: SiteContent = {
         label: 'LinkedIn',
         href: 'https://www.linkedin.com/in/david-fan-3a5a66313/',
         icon: 'linkedin',
-      },
-      {
-        label: 'Email',
-        href: 'mailto:davidwfan26@gmail.com',
-        icon: 'mail',
       },
     ],
   },

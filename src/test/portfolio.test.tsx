@@ -1,8 +1,7 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import App from '../App';
 import { siteContent } from '../content/siteContent';
-import { DEMO_PROMPTS } from '../components/CoresideVisual';
 
 describe('David Fan Portfolio Site', () => {
   beforeEach(() => {
@@ -33,19 +32,73 @@ describe('David Fan Portfolio Site', () => {
     expect(githubLinks[0]).toHaveAttribute('href', 'https://github.com/Qtrick');
   });
 
-  it('contains the EXACT LinkedIn destination for David Fan', () => {
+  it('renders both projects simultaneously as a simple list', () => {
     render(<App />);
 
-    const EXPECTED_LINKEDIN = 'https://www.linkedin.com/in/david-fan-3a5a66313/';
+    // Both projects must be rendered at the same time
+    const prebaseHeading = screen.getByRole('heading', { level: 3, name: 'PreBase' });
+    const coresideHeading = screen.getByRole('heading', { level: 3, name: 'Coreside' });
 
-    const linkedInLinks = screen.getAllByRole('link', { name: /LinkedIn/i });
-    expect(linkedInLinks.length).toBeGreaterThanOrEqual(2);
+    expect(prebaseHeading).toBeInTheDocument();
+    expect(coresideHeading).toBeInTheDocument();
 
-    linkedInLinks.forEach((link) => {
-      expect(link).toHaveAttribute('href', EXPECTED_LINKEDIN);
-      // Ensure the old incorrect URL is nowhere
-      expect(link.getAttribute('href')).not.toBe('https://www.linkedin.com/in/david-fan');
+    // Verify concise, human project descriptions
+    expect(
+      screen.getByText('A codebase mapping IDE for seeing how software connects.')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('A personal software environment where conversations can become useful tools.')
+    ).toBeInTheDocument();
+
+    // Verify semantic list markup is used
+    const projectList = screen.getByRole('list', { name: 'Projects' });
+    expect(projectList).toBeInTheDocument();
+    expect(projectList.children.length).toBe(2);
+  });
+
+  it('PreBase GitHub link is correct', () => {
+    render(<App />);
+
+    const prebaseLink = screen.getByRole('link', {
+      name: /View PreBase repository on GitHub/i,
     });
+    expect(prebaseLink).toBeInTheDocument();
+    expect(prebaseLink).toHaveAttribute('href', 'https://github.com/Qtrick/prebasecode');
+    expect(prebaseLink).toHaveAttribute('target', '_blank');
+    expect(prebaseLink).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('Coreside GitHub link is correct', () => {
+    render(<App />);
+
+    const coresideLink = screen.getByRole('link', {
+      name: /View Coreside repository on GitHub/i,
+    });
+    expect(coresideLink).toBeInTheDocument();
+    expect(coresideLink).toHaveAttribute('href', 'https://github.com/Qtrick/coreside');
+    expect(coresideLink).toHaveAttribute('target', '_blank');
+    expect(coresideLink).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('no project demo components or interactive canvas are rendered', () => {
+    const { container } = render(<App />);
+
+    // No node graph, no interactive prompt cards, no agent logs, no generated tools
+    expect(screen.queryByRole('button', { name: /Try prompt/i })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Building tool.../i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/App\.tsx/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Sidebar\.tsx/i)).not.toBeInTheDocument();
+    expect(container.querySelector('.project-visual-wrapper')).not.toBeInTheDocument();
+    expect(container.querySelector('.project-display-panel')).not.toBeInTheDocument();
+  });
+
+  it('no project toggle or tabs exist', () => {
+    render(<App />);
+
+    // No tablist, no tabs, no tabpanels
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
+    expect(screen.queryByRole('tabpanel')).not.toBeInTheDocument();
   });
 
   it('completely excludes Tech Regalia from the entire site', () => {
@@ -59,249 +112,52 @@ describe('David Fan Portfolio Site', () => {
     expect(container.textContent).not.toContain('—');
   });
 
-  it('toggles between PreBase and Coreside projects with tabs and smooth transitions', async () => {
+  it('contains the EXACT LinkedIn destination for David Fan', () => {
     render(<App />);
 
-    // By default, PreBase is active
-    expect(screen.getByRole('heading', { level: 3, name: 'PreBase' })).toBeInTheDocument();
-    expect(screen.getByText(/An editor that maps out codebases visually/i)).toBeInTheDocument();
-    expect(screen.getByText('Code-OSS')).toBeInTheDocument();
+    const EXPECTED_LINKEDIN = 'https://www.linkedin.com/in/david-fan-3a5a66313/';
 
-    const prebaseTab = screen.getByRole('tab', { name: 'PreBase' });
-    const coresideTab = screen.getByRole('tab', { name: 'Coreside' });
+    const linkedInLinks = screen.getAllByRole('link', { name: /LinkedIn/i });
+    expect(linkedInLinks.length).toBeGreaterThanOrEqual(2);
 
-    expect(prebaseTab).toHaveAttribute('aria-selected', 'true');
-    expect(coresideTab).toHaveAttribute('aria-selected', 'false');
-
-    // Switch to Coreside
-    fireEvent.click(coresideTab);
-
-    // Tab updates immediately
-    expect(coresideTab).toHaveAttribute('aria-selected', 'true');
-    expect(prebaseTab).toHaveAttribute('aria-selected', 'false');
-
-    // Content updates with smooth transition
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 3, name: 'Coreside' })).toBeInTheDocument();
-    });
-
-    expect(
-      screen.getByText(/A desktop app that turns plain text into little tools/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText('Tauri 2')).toBeInTheDocument();
-    expect(screen.getByText('Rust')).toBeInTheDocument();
-
-    // Switch back to PreBase
-    fireEvent.click(prebaseTab);
-    expect(prebaseTab).toHaveAttribute('aria-selected', 'true');
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 3, name: 'PreBase' })).toBeInTheDocument();
+    linkedInLinks.forEach((link) => {
+      expect(link).toHaveAttribute('href', EXPECTED_LINKEDIN);
+      expect(link.getAttribute('href')).not.toBe('https://www.linkedin.com/in/david-fan');
     });
   });
 
-  describe('PreBase Visual Canvas', () => {
-    it('renders all file nodes as accessible buttons', () => {
-      render(<App />);
+  it('displays dfan@umass.edu and uses it for mailto links', () => {
+    const { container } = render(<App />);
 
-      const nodeNames = [
-        'App.tsx',
-        'Sidebar.tsx',
-        'UserProfile.tsx',
-        'apiClient.ts',
-        'auth.ts',
-        'NavItem.tsx',
-      ];
+    // Correct email is visible
+    expect(screen.getByText('dfan@umass.edu')).toBeInTheDocument();
 
-      nodeNames.forEach((name) => {
-        expect(
-          screen.getByRole('button', { name: new RegExp(`^${name}`, 'i') })
-        ).toBeInTheDocument();
-      });
-    });
+    // Mailto link uses dfan@umass.edu
+    const mailtoLink = screen.getByRole('link', { name: 'dfan@umass.edu' });
+    expect(mailtoLink).toHaveAttribute('href', 'mailto:dfan@umass.edu');
 
-    it('clicking a file node updates selected state and contextual detail', async () => {
-      render(<App />);
-
-      // Default selected is App.tsx
-      const appNode = screen.getByRole('button', { name: /^App\.tsx/i });
-      expect(appNode).toHaveAttribute('aria-pressed', 'true');
-
-      // Click Sidebar.tsx
-      const sidebarNode = screen.getByRole('button', { name: /^Sidebar\.tsx/i });
-      fireEvent.click(sidebarNode);
-
-      expect(sidebarNode).toHaveAttribute('aria-pressed', 'true');
-      expect(appNode).toHaveAttribute('aria-pressed', 'false');
-
-      // Check contextual detail
-      expect(
-        screen.getByText(/Navigation sidebar\. Renders page links and uses NavItem\.tsx\./i)
-      ).toBeInTheDocument();
-
-      // Click apiClient.ts node
-      const apiNode = screen.getByRole('button', { name: /^apiClient\.ts/i });
-      fireEvent.click(apiNode);
-
-      expect(apiNode).toHaveAttribute('aria-pressed', 'true');
-      expect(
-        screen.getByText(/Handles network requests and error handling\./i)
-      ).toBeInTheDocument();
-    });
-
-    it('keyboard navigation (Enter key) updates selected node', () => {
-      render(<App />);
-
-      const navItemNode = screen.getByRole('button', { name: /^NavItem\.tsx/i });
-      fireEvent.click(navItemNode);
-
-      expect(navItemNode).toHaveAttribute('aria-pressed', 'true');
-      expect(
-        screen.getByText(/Reusable navigation link item used by Sidebar\.tsx\./i)
-      ).toBeInTheDocument();
-    });
-
-    it('clicking a connected file chip updates selected node', () => {
-      render(<App />);
-
-      // Default is App.tsx, which connects to Sidebar.tsx, UserProfile.tsx, apiClient.ts
-      const sidebarChip = screen.getByRole('button', { name: /Select Sidebar\.tsx/i });
-      fireEvent.click(sidebarChip);
-
-      const sidebarNode = screen.getByRole('button', { name: /^Sidebar\.tsx/i });
-      expect(sidebarNode).toHaveAttribute('aria-pressed', 'true');
-    });
+    // Old email is completely absent
+    expect(container.textContent).not.toContain('davidwfan26@gmail.com');
   });
 
-  describe('Coreside Visual Canvas', () => {
-    beforeEach(() => {
-      // Switch to Coreside tab first
-      render(<App />);
-      fireEvent.click(screen.getByRole('tab', { name: 'Coreside' }));
+  it('handles email copy with visual feedback using dfan@umass.edu', async () => {
+    const writeTextMock = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: writeTextMock,
+      },
     });
 
-    it('starts with NO generated tool visible and exactly one random prompt', async () => {
-      await waitFor(() => {
-        expect(screen.getByRole('region', { name: /Coreside/i })).toBeInTheDocument();
-      });
+    render(<App />);
 
-      // NO tool visible by default
-      expect(screen.queryByText(/^Ready$/)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Glasses today/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Cost per person/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/completed/i)).not.toBeInTheDocument();
+    const copyBtn = screen.getByRole('button', { name: /Copy email address/i });
+    expect(copyBtn).toBeInTheDocument();
 
-      // Exactly ONE prompt visible matching one of the 3 DEMO_PROMPTS
-      const validPromptTexts = DEMO_PROMPTS.map((p) => p.text);
-      const promptCard = screen.getByRole('button', { name: /Try prompt/i });
-      expect(promptCard).toBeInTheDocument();
+    fireEvent.click(copyBtn);
 
-      const matchedPrompt = validPromptTexts.find((text) =>
-        promptCard.textContent?.includes(text)
-      );
-      expect(matchedPrompt).toBeDefined();
-    });
-
-    it('executes prompt flow: click -> agent log -> generated interactive tool', async () => {
-      vi.useFakeTimers();
-
-      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
-      fireEvent.click(promptBtn);
-
-      // Phase 1 -> 2: Agent working
-      act(() => {
-        vi.advanceTimersByTime(200);
-      });
-      expect(screen.getByText(/Building tool.../i)).toBeInTheDocument();
-
-      // Phase 2 -> 3: Tool ready
-      act(() => {
-        vi.advanceTimersByTime(700);
-      });
-
-      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Try another prompt/i })).toBeInTheDocument();
-
-      vi.useRealTimers();
-    });
-
-    it('generated tool has a working interactive component', async () => {
-      vi.useFakeTimers();
-
-      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
-      fireEvent.click(promptBtn);
-
-      act(() => {
-        vi.advanceTimersByTime(900);
-      });
-
-      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
-
-      // Check whichever tool was rendered
-      const increaseWaterBtn = screen.queryByRole('button', { name: /Increase glasses/i });
-      const checklistCheckboxes = screen.queryAllByRole('checkbox');
-      const increaseBillBtn = screen.queryByRole('button', { name: /Increase bill/i });
-
-      if (increaseWaterBtn) {
-        expect(screen.getByText('3')).toBeInTheDocument();
-        fireEvent.click(increaseWaterBtn);
-        expect(screen.getByText('4')).toBeInTheDocument();
-      } else if (checklistCheckboxes.length > 0) {
-        const uncheckedBox = checklistCheckboxes.find((box) => !(box as HTMLInputElement).checked);
-        if (uncheckedBox) {
-          fireEvent.click(uncheckedBox);
-          expect((uncheckedBox as HTMLInputElement).checked).toBe(true);
-        }
-      } else if (increaseBillBtn) {
-        expect(screen.getByText('$120')).toBeInTheDocument();
-        fireEvent.click(increaseBillBtn);
-        expect(screen.getByText('$140')).toBeInTheDocument();
-      }
-
-      vi.useRealTimers();
-    });
-
-    it('respects prefers-reduced-motion by bypassing synthesis delay', () => {
-      const matchMediaSpy = vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
-        matches: query.includes('prefers-reduced-motion'),
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      }));
-
-      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
-      fireEvent.click(promptBtn);
-
-      // Instantly reaches ready without timers
-      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
-
-      matchMediaSpy.mockRestore();
-    });
-
-    it('replay resets the flow to a clean prompt with no generated tool', async () => {
-      vi.useFakeTimers();
-
-      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
-      fireEvent.click(promptBtn);
-
-      act(() => {
-        vi.advanceTimersByTime(900);
-      });
-
-      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
-
-      // Click replay
-      const replayBtn = screen.getByRole('button', { name: /Try another prompt/i });
-      fireEvent.click(replayBtn);
-
-      // Should be back to idle state with no tool
-      expect(screen.queryByText(/^Ready$/)).not.toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Try prompt/i })).toBeInTheDocument();
-
-      vi.useRealTimers();
+    expect(writeTextMock).toHaveBeenCalledWith('dfan@umass.edu');
+    await waitFor(() => {
+      expect(screen.getByText('Copied')).toBeInTheDocument();
     });
   });
 
@@ -320,27 +176,6 @@ describe('David Fan Portfolio Site', () => {
     const lightToggleBtn = screen.getByRole('button', { name: /Switch to light theme/i });
     fireEvent.click(lightToggleBtn);
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-  });
-
-  it('handles email copy with visual feedback', async () => {
-    const writeTextMock = vi.fn().mockResolvedValue(undefined);
-    Object.assign(navigator, {
-      clipboard: {
-        writeText: writeTextMock,
-      },
-    });
-
-    render(<App />);
-
-    const copyBtn = screen.getByRole('button', { name: /Copy email address/i });
-    expect(copyBtn).toBeInTheDocument();
-
-    fireEvent.click(copyBtn);
-
-    expect(writeTextMock).toHaveBeenCalledWith(siteContent.about.email);
-    await waitFor(() => {
-      expect(screen.getByText('Copied')).toBeInTheDocument();
-    });
   });
 
   it('contains accessible anchors and correct navigation targets', () => {
@@ -363,6 +198,45 @@ describe('David Fan Portfolio Site', () => {
     const ambientBg = container.querySelector('.ambient-background');
     expect(ambientBg).toBeInTheDocument();
     expect(ambientBg).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('.ambient-mesh')).toBeInTheDocument();
+    expect(container.querySelector('.ambient-aura-primary')).toBeInTheDocument();
+    expect(container.querySelector('.ambient-aura-secondary')).toBeInTheDocument();
+    expect(container.querySelector('.ambient-grain')).toBeInTheDocument();
+  });
+
+  it('respects prefers-reduced-motion for instant reveal', () => {
+    const matchMediaSpy = vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
+      matches: query.includes('prefers-reduced-motion'),
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    render(<App />);
+
+    // Work section and about section should be immediately revealed
+    const workSection = document.getElementById('work');
+    expect(workSection).toHaveClass('is-revealed');
+
+    const aboutSection = document.getElementById('about');
+    expect(aboutSection).toHaveClass('is-revealed');
+
+    matchMediaSpy.mockRestore();
+  });
+
+  it('implements responsive containers across all main sections', () => {
+    const { container } = render(<App />);
+    const siteWrappers = container.querySelectorAll('.site-wrapper');
+    expect(siteWrappers.length).toBeGreaterThanOrEqual(4);
+
+    const projectItems = container.querySelectorAll('.project-item');
+    expect(projectItems.length).toBe(2);
+
+    const aboutContainer = container.querySelector('.about-container');
+    expect(aboutContainer).toBeInTheDocument();
   });
 });
-

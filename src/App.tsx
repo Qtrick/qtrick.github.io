@@ -11,9 +11,17 @@ export const App: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const saved = localStorage.getItem('df_portfolio_theme');
     if (saved === 'dark' || saved === 'light') return saved;
-    // Default to warm off-white editorial theme
     return 'light';
   });
+
+  // Deterministic top-to-bottom sequence gating:
+  // 1-5: Header & Hero animate on mount
+  // After hero settles (~380ms), Work is eligible to reveal
+  const [isHeroDone, setIsHeroDone] = useState(false);
+  // When Work reveals, About becomes eligible to reveal
+  const [isWorkRevealed, setIsWorkRevealed] = useState(false);
+  // When About reveals, Footer reveals
+  const [isAboutRevealed, setIsAboutRevealed] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -24,13 +32,41 @@ export const App: React.FC = () => {
     document.title = siteContent.meta.title;
   }, []);
 
+  useEffect(() => {
+    // Check prefers-reduced-motion
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    ) {
+      setIsHeroDone(true);
+      setIsWorkRevealed(true);
+      setIsAboutRevealed(true);
+      return;
+    }
+
+    // Hero entrance completes in ~380ms (Name 80ms -> Headline 160ms -> Subline 240ms -> Links 320ms)
+    const timer = setTimeout(() => {
+      setIsHeroDone(true);
+    }, 380);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleWorkRevealed = () => {
+    setIsWorkRevealed(true);
+  };
+
+  const handleAboutRevealed = () => {
+    setIsAboutRevealed(true);
+  };
+
   return (
     <div className="portfolio-app">
-      {/* Subtle ambient atmospheric background */}
+      {/* Living Atmospheric Background */}
       <AmbientBackground />
 
       {/* Accessible skip link */}
@@ -38,7 +74,7 @@ export const App: React.FC = () => {
         Skip to main content
       </a>
 
-      {/* Global Minimal Header */}
+      {/* 1. Global Minimal Header */}
       <Header
         ownerName={siteContent.hero.name}
         navigation={siteContent.navigation}
@@ -48,6 +84,7 @@ export const App: React.FC = () => {
 
       {/* Main Content Sections */}
       <main id="main-content" tabIndex={-1}>
+        {/* 2-5: Hero (David Fan -> Headline -> Subline -> Links) */}
         <Hero
           name={siteContent.hero.name}
           headline={siteContent.hero.headline}
@@ -55,21 +92,30 @@ export const App: React.FC = () => {
           links={siteContent.hero.links}
         />
 
+        {/* 6-8: Work Section (Heading -> PreBase -> Coreside) */}
         <WorkSection
           sectionTitle={siteContent.work.sectionTitle}
           projects={siteContent.work.projects}
+          enabled={isHeroDone}
+          onRevealed={handleWorkRevealed}
         />
 
+        {/* 9-11: About Section (Heading -> Bio -> Links/Email) */}
         <AboutSection
           sectionTitle={siteContent.about.sectionTitle}
           bio={siteContent.about.bio}
           email={siteContent.about.email}
           links={siteContent.about.links}
+          enabled={isWorkRevealed}
+          onRevealed={handleAboutRevealed}
         />
       </main>
 
-      {/* Minimal Footer */}
-      <Footer copyright={siteContent.footer.copyright} />
+      {/* 12. Minimal Footer */}
+      <Footer
+        copyright={siteContent.footer.copyright}
+        isRevealed={isAboutRevealed}
+      />
     </div>
   );
 };

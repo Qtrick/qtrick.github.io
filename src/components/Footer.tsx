@@ -3,13 +3,17 @@ import './Footer.css';
 
 interface FooterProps {
   copyright: string;
+  isRevealed?: boolean;
 }
 
-export const Footer: React.FC<FooterProps> = ({ copyright }) => {
+export const Footer: React.FC<FooterProps> = ({
+  copyright,
+  isRevealed = true,
+}) => {
   return (
-    <footer className="site-footer">
+    <footer className={`site-footer ${isRevealed ? 'is-revealed' : ''}`}>
       <div className="site-wrapper footer-inner">
-        <p className="footer-copyright">{copyright}</p>
+        <p className="copyright-text">{copyright}</p>
       </div>
     </footer>
   );

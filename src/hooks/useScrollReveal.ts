@@ -1,10 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function useScrollReveal<T extends HTMLElement>() {
+export interface ScrollRevealOptions {
+  enabled?: boolean;
+  onReveal?: () => void;
+  rootMargin?: string;
+  threshold?: number;
+}
+
+export function useScrollReveal<T extends HTMLElement>(
+  options: ScrollRevealOptions = {}
+) {
+  const {
+    enabled = true,
+    onReveal,
+    rootMargin = '50px 0px 50px 0px',
+    threshold = 0.02,
+  } = options;
   const ref = useRef<T | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
 
   useEffect(() => {
+    if (!enabled || isRevealed) return;
+
     const node = ref.current;
     if (!node) return;
 
@@ -14,19 +31,23 @@ export function useScrollReveal<T extends HTMLElement>() {
       window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
     ) {
       setIsRevealed(true);
+      onReveal?.();
       return;
     }
 
     // Fallback if IntersectionObserver is not available
     if (typeof IntersectionObserver === 'undefined') {
       setIsRevealed(true);
+      onReveal?.();
       return;
     }
 
-    // If already in or near viewport on mount, reveal immediately
+    // If already in or near viewport when enabled, reveal
     const rect = node.getBoundingClientRect();
-    if (rect.top <= (window.innerHeight || document.documentElement.clientHeight) + 80) {
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (rect.top <= vh + 60 && rect.bottom >= -60) {
       setIsRevealed(true);
+      onReveal?.();
       return;
     }
 
@@ -35,13 +56,14 @@ export function useScrollReveal<T extends HTMLElement>() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsRevealed(true);
+            onReveal?.();
             observer.unobserve(entry.target);
           }
         });
       },
       {
-        threshold: 0.02,
-        rootMargin: '50px 0px 50px 0px',
+        threshold,
+        rootMargin,
       }
     );
 
@@ -50,7 +72,7 @@ export function useScrollReveal<T extends HTMLElement>() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [enabled, isRevealed, onReveal, rootMargin, threshold]);
 
   return { ref, isRevealed };
 }

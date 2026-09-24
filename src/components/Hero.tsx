@@ -17,17 +17,17 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section className="hero-section" aria-label="Introduction">
       <div className="site-wrapper hero-container">
-        {/* Name / Greeting */}
-        <p className="hero-name animate-enter delay-1">{name}</p>
+        {/* Step 2: David Fan name */}
+        <p className="hero-name hero-animate-1">{name}</p>
 
-        {/* Main Personal Headline */}
-        <h1 className="hero-headline animate-enter delay-2">{headline}</h1>
+        {/* Step 3: Main personal headline */}
+        <h1 className="hero-headline hero-animate-2">{headline}</h1>
 
-        {/* Supporting Line */}
-        <p className="hero-subline animate-enter delay-3">{subline}</p>
+        {/* Step 4: Supporting sentence */}
+        <p className="hero-subline hero-animate-3">{subline}</p>
 
-        {/* Action Links */}
-        <div className="hero-actions animate-enter delay-4">
+        {/* Step 5: Hero action links */}
+        <div className="hero-actions hero-animate-4">
           {links.map((link) => (
             <a
               key={link.label}

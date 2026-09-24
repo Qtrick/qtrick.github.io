@@ -1,12 +1,9 @@
 export interface ProjectItem {
   id: string;
   name: string;
-  tagline: string;
-  role: string;
-  status: string;
-  technologies: string[];
-  githubUrl: string;
   description: string;
+  githubUrl: string;
+  descriptor?: string;
 }
 
 export interface NavItem {

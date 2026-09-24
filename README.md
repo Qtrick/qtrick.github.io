@@ -6,7 +6,7 @@ The personal portfolio website of **David Fan** (Freshman Biology Major at UMass
 
 - **Proof of Work First:** Focuses on actual software systems engineered: specifically [PreBase](https://github.com/Qtrick/prebasecode) (codebase mapping IDE) and [Coreside](https://github.com/Qtrick/coreside) (personal software environment with trusted declarative tools).
 - **Decoupled Content Architecture:** All human-facing copy is centralized in [`src/content/siteContent.ts`](./src/content/siteContent.ts). You can rewrite any copy, bio, project detail, or tagline without touching component markup.
-- **Editorial & Restrained Design:** Clean typography (Inter + JetBrains Mono), dark/light theme support, accessible semantic HTML, keyboard navigation, and interactive architecture diagrams.
+- **Editorial & Restrained Design:** Clean typography (Inter + JetBrains Mono), dark/light theme support, accessible semantic HTML, keyboard navigation, and organic living atmospheric background.
 - **Static GitHub Pages Deployment:** Built with React 19, TypeScript 5.7, and Vite 6. Deployed automatically via GitHub Actions.
 
 ## Quick Start
