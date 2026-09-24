@@ -5,6 +5,7 @@ import { Hero } from './components/Hero';
 import { WorkSection } from './components/WorkSection';
 import { AboutSection } from './components/AboutSection';
 import { Footer } from './components/Footer';
+import { AmbientBackground } from './components/AmbientBackground';
 
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -29,6 +30,9 @@ export const App: React.FC = () => {
 
   return (
     <div className="portfolio-app">
+      {/* Subtle ambient atmospheric background */}
+      <AmbientBackground />
+
       {/* Accessible skip link */}
       <a href="#main-content" className="skip-link">
         Skip to main content

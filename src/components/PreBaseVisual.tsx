@@ -1,108 +1,182 @@
 import React, { useState } from 'react';
 import './ProjectVisuals.css';
 
-interface NodeInfo {
+interface PreBaseNode {
   id: string;
   name: string;
-  kind: string;
-  x: number;
-  y: number;
-  connections: string[];
+  sublabel: string;
+  x: number; // percentage 0-100
+  y: number; // percentage 0-100
+  detail: string;
+  connectedTo: string[];
 }
 
-const NODES: NodeInfo[] = [
-  { id: 'workbench', name: 'Code-OSS Host', kind: 'Host', x: 260, y: 130, connections: ['graph', 'runtime', 'agent'] },
-  { id: 'graph', name: 'Graph Subsystem', kind: 'Mapping', x: 110, y: 70, connections: ['parser', 'temporal'] },
-  { id: 'parser', name: 'AST Parser', kind: 'Analysis', x: 50, y: 190, connections: [] },
-  { id: 'temporal', name: 'Temporal Index', kind: 'History', x: 155, y: 215, connections: [] },
-  { id: 'runtime', name: 'Runtime Preview', kind: 'Preview', x: 410, y: 70, connections: ['devserver'] },
-  { id: 'devserver', name: 'Vite DevServer', kind: 'Network', x: 470, y: 190, connections: [] },
-  { id: 'agent', name: 'Agent Context', kind: 'AI', x: 360, y: 215, connections: [] },
+const PREBASE_NODES: PreBaseNode[] = [
+  {
+    id: 'workbench',
+    name: 'Workbench',
+    sublabel: 'Code-OSS Host',
+    x: 50,
+    y: 32,
+    detail: 'Forked from Code-OSS 1.128, providing the full editor workbench and extension host.',
+    connectedTo: ['graph', 'runtime', 'agents'],
+  },
+  {
+    id: 'graph',
+    name: 'Architecture Map',
+    sublabel: 'Graph Engine',
+    x: 22,
+    y: 24,
+    detail: 'Maps code relationships, imports, and module dependencies into a spatial canvas.',
+    connectedTo: ['workbench', 'parser', 'temporal'],
+  },
+  {
+    id: 'runtime',
+    name: 'Runtime Preview',
+    sublabel: 'In-IDE Browser',
+    x: 78,
+    y: 24,
+    detail: 'Runs local dev servers and frontend previews directly beside source files.',
+    connectedTo: ['workbench'],
+  },
+  {
+    id: 'agents',
+    name: 'Agents',
+    sublabel: 'Context AI',
+    x: 80,
+    y: 74,
+    detail: 'AI assistant integrated with the editor workspace, informed by codebase graphs.',
+    connectedTo: ['workbench'],
+  },
+  {
+    id: 'parser',
+    name: 'AST Parser',
+    sublabel: 'Syntax Engine',
+    x: 18,
+    y: 74,
+    detail: 'Extracts syntax trees to identify symbols, cross-file imports, and call hierarchies.',
+    connectedTo: ['graph'],
+  },
+  {
+    id: 'temporal',
+    name: 'Temporal Index',
+    sublabel: 'Git History',
+    x: 48,
+    y: 78,
+    detail: 'Correlates commit timelines with codebase architecture to track structural evolution.',
+    connectedTo: ['graph'],
+  },
 ];
 
 export const PreBaseVisual: React.FC = () => {
-  const [activeNode, setActiveNode] = useState<string>('graph');
+  const [selectedId, setSelectedId] = useState<string>('graph');
 
-  const selected = NODES.find((n) => n.id === activeNode) || NODES[1];
+  const selectedNode =
+    PREBASE_NODES.find((node) => node.id === selectedId) || PREBASE_NODES[1];
+
+  // Helper to check if an edge connects to the selected node
+  const isEdgeConnected = (sourceId: string, targetId: string) => {
+    return selectedId === sourceId || selectedId === targetId;
+  };
 
   return (
-    <div className="project-visual-card prebase-visual">
+    <div className="project-visual-card prebase-visual" role="region" aria-label="PreBase Interactive Architecture Canvas">
       <div className="visual-top-bar">
-        <span className="visual-tag">Codebase Map</span>
-        <span className="visual-hint">Click a module to inspect connections</span>
+        <div className="visual-title-group">
+          <span className="visual-tag">PreBase Architecture</span>
+          <span className="visual-subtag">Code-OSS + Spatial Graph</span>
+        </div>
+        <span className="visual-hint">Click a module to inspect relationships</span>
       </div>
 
-      <div className="graph-canvas-wrapper">
+      {/* Interactive Node Graph Canvas */}
+      <div className="prebase-graph-container" aria-label="Interactive module map">
+        {/* SVG connection lines layer */}
         <svg
-          viewBox="0 0 520 270"
-          className="graph-svg"
-          preserveAspectRatio="xMidYMid meet"
-          aria-label="Interactive architecture graph for PreBase"
+          className="prebase-graph-svg"
+          aria-hidden="true"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
         >
-          {/* Edges */}
-          <g className="graph-edges">
-            {NODES.map((node) =>
-              node.connections.map((targetId) => {
-                const target = NODES.find((n) => n.id === targetId);
-                if (!target) return null;
-                const isHighlighted =
-                  activeNode === node.id || activeNode === target.id;
-                return (
-                  <line
-                    key={`${node.id}-${target.id}`}
-                    x1={node.x}
-                    y1={node.y}
-                    x2={target.x}
-                    y2={target.y}
-                    className={`graph-edge ${isHighlighted ? 'edge-highlight' : ''}`}
-                  />
-                );
-              })
-            )}
-          </g>
+          {PREBASE_NODES.flatMap((source) =>
+            source.connectedTo.map((targetId) => {
+              const target = PREBASE_NODES.find((n) => n.id === targetId);
+              if (!target) return null;
+              // Avoid duplicate reverse lines
+              if (source.id > target.id && target.connectedTo.includes(source.id)) {
+                return null;
+              }
 
-          {/* Nodes */}
-          <g className="graph-nodes">
-            {NODES.map((node) => {
-              const isSelected = activeNode === node.id;
+              const highlighted = isEdgeConnected(source.id, target.id);
+
               return (
-                <g
-                  key={node.id}
-                  className={`graph-node ${isSelected ? 'node-selected' : ''}`}
-                  onClick={() => setActiveNode(node.id)}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Select ${node.name}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setActiveNode(node.id);
-                    }
-                  }}
-                >
-                  <circle
-                    cx={node.x}
-                    cy={node.y}
-                    r={isSelected ? 18 : 14}
-                    className="node-circle"
-                  />
-                  <text
-                    x={node.x}
-                    y={node.y > 100 ? node.y + 26 : node.y - 20}
-                    textAnchor="middle"
-                    className="node-label"
-                  >
-                    {node.name}
-                  </text>
-                </g>
+                <line
+                  key={`${source.id}-${target.id}`}
+                  x1={`${source.x}%`}
+                  y1={`${source.y}%`}
+                  x2={`${target.x}%`}
+                  y2={`${target.y}%`}
+                  className={`prebase-edge ${highlighted ? 'prebase-edge-highlight' : ''}`}
+                />
               );
-            })}
-          </g>
+            })
+          )}
         </svg>
+
+        {/* Real DOM Buttons for Interactive Nodes */}
+        <div className="prebase-nodes-layer">
+          {PREBASE_NODES.map((node) => {
+            const isSelected = selectedId === node.id;
+            const isConnected = selectedNode.connectedTo.includes(node.id) || node.connectedTo.includes(selectedId);
+
+            return (
+              <button
+                key={node.id}
+                type="button"
+                className={`prebase-node-btn ${isSelected ? 'is-selected' : ''} ${
+                  isConnected && !isSelected ? 'is-connected' : ''
+                }`}
+                style={{
+                  left: `${node.x}%`,
+                  top: `${node.y}%`,
+                }}
+                onClick={() => setSelectedId(node.id)}
+                aria-pressed={isSelected}
+                aria-label={`${node.name} (${node.sublabel})`}
+              >
+                <span className="node-btn-name">{node.name}</span>
+                <span className="node-btn-sublabel">{node.sublabel}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="visual-status-bar">
-        <span className="status-kind">{selected.kind} Module</span>
-        <span className="status-name">{selected.name}</span>
+      {/* Contextual Detail Panel */}
+      <div className="prebase-node-context" aria-live="polite">
+        <div className="context-header">
+          <span className="context-name">{selectedNode.name}</span>
+          <span className="context-sublabel">{selectedNode.sublabel}</span>
+        </div>
+        <p className="context-detail">{selectedNode.detail}</p>
+        <div className="context-links">
+          <span className="context-links-label">Connected:</span>
+          {selectedNode.connectedTo.map((targetId) => {
+            const target = PREBASE_NODES.find((n) => n.id === targetId);
+            if (!target) return null;
+            return (
+              <button
+                key={target.id}
+                type="button"
+                className="context-link-chip"
+                aria-label={`Inspect ${target.name}`}
+                onClick={() => setSelectedId(target.id)}
+              >
+                {target.name}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

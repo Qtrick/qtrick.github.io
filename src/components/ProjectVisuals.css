@@ -1,33 +1,49 @@
-/* Project Visuals Styles */
+/* Project Visuals Styles - PreBase & Coreside */
 
 .project-visual-card {
   width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.25rem;
+  padding: 1.125rem 1.25rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 320px;
+  position: relative;
+  transition: border-color var(--transition-fast);
 }
 
 .visual-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.625rem;
   border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.visual-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .visual-tag {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-primary);
+}
+
+.visual-subtag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .visual-hint {
@@ -35,117 +51,356 @@
   color: var(--text-muted);
 }
 
-/* PreBase Graph SVG */
-.graph-canvas-wrapper {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.replay-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.graph-svg {
-  width: 100%;
-  max-height: 220px;
-  overflow: visible;
+.replay-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  background: var(--bg-primary);
 }
 
-.graph-edge {
+/* ==========================================================================
+   PreBase Visual Styles (DOM Buttons + SVG Lines)
+   ========================================================================== */
+
+.prebase-graph-container {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  margin: 0.25rem 0 0.75rem;
+  user-select: none;
+}
+
+.prebase-graph-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.prebase-edge {
   stroke: var(--border-strong);
   stroke-width: 1.5;
-  transition: all var(--transition-fast);
+  stroke-dasharray: 4 3;
+  transition: stroke var(--transition-fast), stroke-width var(--transition-fast);
 }
 
-.graph-edge.edge-highlight {
+.prebase-edge.prebase-edge-highlight {
   stroke: var(--text-primary);
-  stroke-width: 2;
+  stroke-width: 2.25;
+  stroke-dasharray: none;
 }
 
-.graph-node {
-  cursor: pointer;
+.prebase-nodes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 }
 
-.node-circle {
-  fill: var(--bg-primary);
-  stroke: var(--border-strong);
-  stroke-width: 2;
-  transition: all var(--transition-fast);
-}
-
-.graph-node:hover .node-circle,
-.graph-node.node-selected .node-circle {
-  fill: var(--text-primary);
-  stroke: var(--text-primary);
-}
-
-.node-label {
-  font-size: 11px;
-  fill: var(--text-secondary);
-  font-weight: 500;
-  pointer-events: none;
-  transition: all var(--transition-fast);
-}
-
-.graph-node:hover .node-label,
-.graph-node.node-selected .node-label {
-  fill: var(--text-primary);
-  font-weight: 600;
-}
-
-/* Coreside Visual Flow */
-.coreside-content-flow {
+.prebase-node-btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin: 0.5rem 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.65rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
 }
 
-.prompt-bubble {
+.prebase-node-btn:hover {
+  transform: translate(-50%, -52%);
+  border-color: var(--text-primary);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.prebase-node-btn.is-selected {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.prebase-node-btn.is-connected {
+  border-color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.node-btn-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.node-btn-sublabel {
+  font-size: 0.625rem;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+/* PreBase Context Panel */
+.prebase-node-context {
   background: var(--bg-primary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
-.prompt-role {
-  display: block;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
-}
-
-.prompt-text {
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  font-style: italic;
-  margin: 0;
-}
-
-.synthesis-badge {
+.context-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  padding-left: 0.5rem;
 }
 
-.synthesis-arrow {
-  color: var(--text-primary);
+.context-name {
+  font-size: 0.8125rem;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
-.generated-tool-card {
+.context-sublabel {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  background: var(--tag-bg);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.context-detail {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.context-links {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  padding-top: 0.375rem;
+  border-top: 1px dashed var(--border-subtle);
+}
+
+.context-links-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.context-link-chip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.125rem 0.375rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.context-link-chip:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+/* ==========================================================================
+   Coreside Visual Styles (Prompt -> Agent Tray -> Live Tool)
+   ========================================================================== */
+
+.coreside-canvas-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-height: 220px;
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* Prompt Card */
+.coreside-prompt-card {
   background: var(--bg-primary);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.875rem 1rem;
-  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
 }
 
-.tool-card-header {
+.coreside-prompt-card.is-clickable {
+  cursor: pointer;
+  border-style: solid;
+  border-color: var(--border-strong);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.coreside-prompt-card.is-clickable:hover {
+  border-color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.coreside-prompt-card.is-submitting {
+  transform: translateY(2px);
+  opacity: 0.9;
+  border-color: var(--text-primary);
+}
+
+.coreside-prompt-card.is-sent {
+  opacity: 0.85;
+  background: var(--bg-secondary);
+  border-color: var(--border-subtle);
+}
+
+.prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.375rem;
+}
+
+.prompt-user-badge {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.prompt-cta-hint {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.prompt-quote {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  font-style: normal;
+}
+
+/* Agent Tray */
+.coreside-agent-tray {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.coreside-agent-tray.tray-condensed {
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  border-style: dashed;
+}
+
+.agent-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.agent-tray-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.125rem;
+}
+
+.agent-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  transition: opacity var(--transition-fast);
+}
+
+.agent-step-item.is-pending {
+  opacity: 0.35;
+}
+
+.agent-step-item.is-active {
+  opacity: 1;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.step-indicator {
+  font-weight: bold;
+  color: #10b981;
+  width: 12px;
+  text-align: center;
+}
+
+.agent-success-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 500;
+}
+
+.agent-success-icon {
+  font-weight: bold;
+}
+
+/* Generated Tool Window */
+.coreside-generated-tool {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@keyframes toolEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-tool-enter {
+  animation: toolEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tool-masthead {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -154,30 +409,50 @@
   margin-bottom: 0.75rem;
 }
 
-.tool-card-title {
+.tool-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tool-icon {
+  font-size: 1rem;
+}
+
+.tool-title {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.tool-card-status {
+.tool-state-pill {
   font-size: 0.6875rem;
-  color: #10b981;
   font-weight: 500;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
 }
 
-.tool-row {
+/* Tool 1: Water */
+.tool-interface-water {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.water-stats-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8125rem;
 }
 
-.tool-label {
+.water-label {
+  font-size: 0.8125rem;
   color: var(--text-secondary);
 }
 
-.counter-controls {
+.water-counter-controls {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -191,38 +466,173 @@
   background: transparent;
   border: none;
   color: var(--text-primary);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 0 0.25rem;
+  padding: 0.1rem 0.35rem;
+  line-height: 1;
 }
 
-.counter-value {
+.counter-val {
   font-weight: 600;
   color: var(--text-primary);
   min-width: 1.25rem;
   text-align: center;
+  font-size: 0.875rem;
 }
 
-.tool-check-row {
-  margin-top: 0.625rem;
-  padding-top: 0.625rem;
-  border-top: 1px dashed var(--border-subtle);
+.water-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
 }
 
-.checkbox-container {
+.water-progress-fill {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 3px;
+  transition: width 0.25s ease-out;
+}
+
+.water-footer {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tool-reset-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tool-reset-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Tool 2: Checklist */
+.tool-interface-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checklist-progress-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.checklist-items-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+}
+
+.checklist-label {
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-}
-
-.check-label {
   font-size: 0.8125rem;
   color: var(--text-primary);
 }
 
-/* Status Bar Bottom */
+.checklist-checkbox {
+  cursor: pointer;
+  accent-color: var(--text-primary);
+}
+
+.checklist-item-text.is-done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Tool 3: Expense */
+.tool-interface-expense {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.expense-inputs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.expense-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.expense-field-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.expense-amount-control,
+.expense-people-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.125rem 0.25rem;
+}
+
+.expense-amount-val,
+.expense-people-val {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.expense-result-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 0.875rem;
+}
+
+.expense-result-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.expense-result-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Visual Status Bar Bottom */
 .visual-status-bar {
   display: flex;
   justify-content: space-between;
@@ -231,6 +641,7 @@
   border-top: 1px solid var(--border-subtle);
   font-size: 0.6875rem;
   color: var(--text-muted);
+  margin-top: auto;
 }
 
 .status-kind {
@@ -246,7 +657,23 @@
     gap: 0.25rem;
   }
 
-  .graph-svg {
-    max-height: 180px;
+  .expense-inputs-row {
+    grid-template-columns: 1fr;
+  }
+
+  .prebase-graph-container {
+    height: 180px;
+  }
+
+  .node-btn-name {
+    font-size: 0.6875rem;
+  }
+
+  .node-btn-sublabel {
+    display: none;
+  }
+
+  .prebase-node-btn {
+    padding: 0.25rem 0.45rem;
   }
 }

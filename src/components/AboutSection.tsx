@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SocialLink } from '../types';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import './AboutSection.css';
 
 interface AboutSectionProps {
@@ -15,6 +16,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   email,
   links,
 }) => {
+  const { ref, isRevealed } = useScrollReveal<HTMLElement>();
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = async () => {
@@ -29,7 +31,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   };
 
   return (
-    <section id="about" className="about-section" aria-label={sectionTitle}>
+    <section
+      ref={ref}
+      id="about"
+      className={`about-section reveal-on-scroll ${isRevealed ? 'is-revealed' : ''}`}
+      aria-label={sectionTitle}
+    >
       <div className="site-wrapper">
         <div className="about-container">
           <h2 className="about-title">{sectionTitle}</h2>

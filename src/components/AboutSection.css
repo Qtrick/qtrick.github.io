@@ -1,7 +1,7 @@
 /* Compact About Section Styles */
 
 .about-section {
-  padding: 3.5rem 0 3rem;
+  padding: 2.25rem 0 1.75rem;
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .about-paragraph {
