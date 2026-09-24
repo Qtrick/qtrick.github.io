@@ -48,9 +48,9 @@
   --radius-full: 9999px;
 
   /* Fluid container scaling based on window/screen width */
-  --container-max: min(94vw, clamp(560px, 64vw + 120px, 1280px));
+  --container-max: min(96vw, clamp(560px, 70vw + 120px, 1400px));
   --container-padding: clamp(1.25rem, 3.5vw, 3rem);
-  --container-wide: min(96vw, clamp(640px, 72vw + 120px, 1400px));
+  --container-wide: min(97vw, clamp(640px, 78vw + 120px, 1520px));
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 150ms var(--ease-out);
@@ -68,33 +68,33 @@
 
 @media (min-width: 641px) and (max-width: 1024px) {
   :root {
-    --container-max: clamp(600px, 82vw, 920px);
+    --container-max: clamp(600px, 86vw, 980px);
     --container-padding: clamp(1.75rem, 4vw, 2.75rem);
-    --container-wide: clamp(640px, 88vw, 1000px);
+    --container-wide: clamp(640px, 92vw, 1060px);
   }
 }
 
 @media (min-width: 1025px) and (max-width: 1439px) {
   :root {
-    --container-max: clamp(840px, 72vw, 1140px);
+    --container-max: clamp(840px, 78vw, 1240px);
     --container-padding: clamp(2rem, 3.5vw, 3.25rem);
-    --container-wide: clamp(920px, 78vw, 1260px);
+    --container-wide: clamp(920px, 84vw, 1360px);
   }
 }
 
 @media (min-width: 1440px) and (max-width: 1919px) {
   :root {
-    --container-max: clamp(1040px, 66vw, 1360px);
+    --container-max: clamp(1040px, 82vw, 1560px);
     --container-padding: clamp(2.5rem, 3.5vw, 4rem);
-    --container-wide: clamp(1140px, 74vw, 1480px);
+    --container-wide: clamp(1140px, 80vw, 1600px);
   }
 }
 
 @media (min-width: 1920px) {
   :root {
-    --container-max: clamp(1200px, 60vw, 1560px);
+    --container-max: clamp(1200px, 66vw, 1700px);
     --container-padding: clamp(3rem, 3.5vw, 5rem);
-    --container-wide: clamp(1320px, 68vw, 1680px);
+    --container-wide: clamp(1320px, 74vw, 1820px);
   }
 }
 

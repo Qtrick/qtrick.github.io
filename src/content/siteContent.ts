@@ -11,9 +11,7 @@ export const siteContent: SiteContent = {
 
   ownerName: 'David Fan',
 
-  navigation: [
-    { label: 'About', href: '#about' },
-  ],
+  navigation: [],
 
   social: {
     github: 'https://github.com/Qtrick',

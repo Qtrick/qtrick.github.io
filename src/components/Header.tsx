@@ -86,17 +86,19 @@ export const Header: React.FC<HeaderProps> = ({
             {ownerName}
           </a>
 
-          <nav className="header-nav" aria-label="Main Navigation">
-            <ul className="nav-list">
-              {navigation.map((item) => (
-                <li key={item.label}>
-                  <a href={item.href} className="nav-link">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {navigation.length > 0 && (
+            <nav className="header-nav" aria-label="Main Navigation">
+              <ul className="nav-list">
+                {navigation.map((item) => (
+                  <li key={item.label}>
+                    <a href={item.href} className="nav-link">
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
 
         {/* Right Side: Email, Global Social Icons, and Theme Toggle */}

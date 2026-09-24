@@ -56,14 +56,13 @@ describe('David Fan Portfolio Site', () => {
       expect(allLinkedIn).toHaveLength(1);
     });
 
-    it('renders primary navigation item About and excludes Work from navigation', () => {
+    it('renders no section navigation in the menu bar', () => {
       render(<App />);
-      expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
-        'href',
-        '#about'
-      );
-      // Work navigation item must be completely removed from top nav
+      // No About or Work links in the top menu bar
+      expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
       expect(screen.queryByRole('link', { name: 'Work' })).not.toBeInTheDocument();
+      // The About section itself still exists further down the page
+      expect(document.getElementById('about')).toBeInTheDocument();
     });
   });
 
