@@ -48,9 +48,9 @@
   --radius-full: 9999px;
 
   /* Fluid container scaling based on window/screen width */
-  --container-max: min(92vw, clamp(560px, 58vw + 120px, 1160px));
+  --container-max: min(94vw, clamp(560px, 64vw + 120px, 1280px));
   --container-padding: clamp(1.25rem, 3.5vw, 3rem);
-  --container-wide: min(94vw, clamp(640px, 66vw + 120px, 1280px));
+  --container-wide: min(96vw, clamp(640px, 72vw + 120px, 1400px));
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 150ms var(--ease-out);
@@ -61,40 +61,40 @@
 @media (max-width: 640px) {
   :root {
     --container-max: 100%;
-    --container-padding: clamp(1.25rem, 5vw, 1.75rem);
+    --container-padding: clamp(1rem, 5vw, 1.75rem);
     --container-wide: 100%;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   :root {
-    --container-max: clamp(600px, 76vw, 840px);
+    --container-max: clamp(600px, 82vw, 920px);
     --container-padding: clamp(1.75rem, 4vw, 2.75rem);
-    --container-wide: clamp(640px, 82vw, 920px);
+    --container-wide: clamp(640px, 88vw, 1000px);
   }
 }
 
 @media (min-width: 1025px) and (max-width: 1439px) {
   :root {
-    --container-max: clamp(840px, 66vw, 1040px);
+    --container-max: clamp(840px, 72vw, 1140px);
     --container-padding: clamp(2rem, 3.5vw, 3.25rem);
-    --container-wide: clamp(920px, 72vw, 1160px);
+    --container-wide: clamp(920px, 78vw, 1260px);
   }
 }
 
 @media (min-width: 1440px) and (max-width: 1919px) {
   :root {
-    --container-max: clamp(1040px, 60vw, 1240px);
+    --container-max: clamp(1040px, 66vw, 1360px);
     --container-padding: clamp(2.5rem, 3.5vw, 4rem);
-    --container-wide: clamp(1140px, 68vw, 1360px);
+    --container-wide: clamp(1140px, 74vw, 1480px);
   }
 }
 
 @media (min-width: 1920px) {
   :root {
-    --container-max: clamp(1200px, 54vw, 1440px);
+    --container-max: clamp(1200px, 60vw, 1560px);
     --container-padding: clamp(3rem, 3.5vw, 5rem);
-    --container-wide: clamp(1320px, 62vw, 1560px);
+    --container-wide: clamp(1320px, 68vw, 1680px);
   }
 }
 

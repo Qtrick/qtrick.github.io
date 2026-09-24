@@ -24,7 +24,7 @@ export const siteContent: SiteContent = {
   hero: {
     greeting: "Hi, I'm David.",
     headline: "I'm a biology student at UMass Amherst who likes building.",
-    subline: "Right now, I'm working on PreBase and Coreside.",
+    subline: 'My interests are currently in AI, educational tech, and startups.',
   },
 
   work: {

@@ -23,7 +23,7 @@ export const App: React.FC = () => {
   // Footer follows shortly after About starts fading in.
   const ABOUT_LEAD_MS = 1000;
   // Hero letter-by-letter entrance completes just before this fires.
-  const HERO_ANIMATION_MS = 2850;
+  const HERO_ANIMATION_MS = 3100;
 
   // Deterministic top-to-bottom sequence gating:
   // 1-5: Header & Hero animate on mount
