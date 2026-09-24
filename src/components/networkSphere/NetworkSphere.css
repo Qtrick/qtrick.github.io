@@ -1,0 +1,71 @@
+/* Hero network sphere: a quiet dotted globe beside the introduction. */
+
+.network-sphere {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: clamp(280px, 30vw, 400px);
+  max-width: 100%;
+  justify-self: end;
+  /* Step 5: gentle entrance after the hero text finishes (~2.7s). */
+  opacity: 0;
+  animation: sphereEnter 1.4s cubic-bezier(0.16, 1, 0.3, 1) 2.7s forwards;
+}
+
+@keyframes sphereEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.network-sphere-canvas {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  outline-offset: 6px;
+}
+
+.network-sphere-canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.network-sphere-canvas:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 6px;
+}
+
+/* Extremely understated discoverability hint. */
+.sphere-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-sphere {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .network-sphere {
+    width: min(78vw, 320px);
+    justify-self: center;
+  }
+}

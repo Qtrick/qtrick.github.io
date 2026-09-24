@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SmoothTextReveal, calculateSequentialDelays } from './SmoothTextReveal';
+import { NetworkSphere } from './networkSphere/NetworkSphere';
 import './Hero.css';
 
 interface HeroProps {
@@ -58,32 +59,39 @@ export const Hero: React.FC<HeroProps> = ({
       </div>
 
       <div className="site-wrapper hero-container">
-        {/* Step 2: "Hi, I'm David." */}
-        <p className="hero-greeting">
-          <SmoothTextReveal
-            text={greeting}
-            baseDelay={greetingDelay}
-            charSpeed={0.016}
-          />
-        </p>
+        <div className="hero-text">
+          {/* Step 2: "Hi, I'm David." */}
+          <p className="hero-greeting">
+            <SmoothTextReveal
+              text={greeting}
+              baseDelay={greetingDelay}
+              charSpeed={0.016}
+            />
+          </p>
 
-        {/* Step 3: Main personal headline - strictly waits for greeting to finish */}
-        <h1 className="hero-headline">
-          <SmoothTextReveal
-            text={headline}
-            baseDelay={headlineDelay}
-            charSpeed={0.015}
-          />
-        </h1>
+          {/* Step 3: Main personal headline - strictly waits for greeting to finish */}
+          <h1 className="hero-headline">
+            <SmoothTextReveal
+              text={headline}
+              baseDelay={headlineDelay}
+              charSpeed={0.015}
+            />
+          </h1>
 
-        {/* Step 4: Supporting sentence - strictly waits for headline to finish */}
-        <p className="hero-subline">
-          <SmoothTextReveal
-            text={subline}
-            baseDelay={sublineDelay}
-            charSpeed={0.015}
-          />
-        </p>
+          {/* Step 4: Supporting sentence - strictly waits for headline to finish */}
+          <p className="hero-subline">
+            <SmoothTextReveal
+              text={subline}
+              baseDelay={sublineDelay}
+              charSpeed={0.015}
+            />
+          </p>
+        </div>
+
+        {/* Step 5: Interactive network sphere, a visual companion to the text */}
+        <div className="hero-visual">
+          <NetworkSphere />
+        </div>
       </div>
     </section>
   );
