@@ -44,10 +44,10 @@ export const App: React.FC = () => {
       return;
     }
 
-    // Hero entrance completes deliberately in ~700ms
+    // Hero strictly sequential letter-by-letter entrance completes smoothly
     const timer = setTimeout(() => {
       setIsHeroDone(true);
-    }, 700);
+    }, 2850);
 
     return () => clearTimeout(timer);
   }, []);
@@ -85,12 +85,11 @@ export const App: React.FC = () => {
 
       {/* Main Content Sections */}
       <main id="main-content" tabIndex={-1}>
-        {/* 2-5: Hero (Hi, I'm David. -> Headline -> Subline -> Work Link) with living ambient background */}
+        {/* 2-4: Hero (Hi, I'm David. -> Headline -> Subline) with living ambient background */}
         <Hero
           greeting={siteContent.hero.greeting}
           headline={siteContent.hero.headline}
           subline={siteContent.hero.subline}
-          workLink={siteContent.hero.workLink}
         />
 
         {/* 6-8: Work Section (Heading -> PreBase -> Coreside) */}

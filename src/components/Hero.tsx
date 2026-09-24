@@ -1,22 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { SmoothTextReveal, calculateSequentialDelays } from './SmoothTextReveal';
 import './Hero.css';
 
 interface HeroProps {
   greeting: string;
   headline: string;
   subline: string;
-  workLink: {
-    label: string;
-    href: string;
-  };
 }
 
 export const Hero: React.FC<HeroProps> = ({
   greeting,
   headline,
   subline,
-  workLink,
 }) => {
+  // Strictly sequential delays: each text waits for the prior text to fully finish
+  const [greetingDelay, headlineDelay, sublineDelay] = useMemo(() => {
+    return calculateSequentialDelays([greeting, headline, subline], {
+      initialDelay: 0.08,
+      charSpeed: 0.015,
+      fadeDuration: 0.18,
+      pauseBetween: 0.04,
+    });
+  }, [greeting, headline, subline]);
+
   return (
     <section className="hero-section" aria-label="Introduction">
       {/* Slow, ambient animated atmospheric background specifically for the Hero */}
@@ -29,21 +35,33 @@ export const Hero: React.FC<HeroProps> = ({
 
       <div className="site-wrapper hero-container">
         {/* Step 2: "Hi, I'm David." */}
-        <p className="hero-greeting hero-animate-1">{greeting}</p>
+        <p className="hero-greeting">
+          <SmoothTextReveal
+            text={greeting}
+            baseDelay={greetingDelay}
+            charSpeed={0.016}
+          />
+        </p>
 
-        {/* Step 3: Main personal headline */}
-        <h1 className="hero-headline hero-animate-2">{headline}</h1>
+        {/* Step 3: Main personal headline - strictly waits for greeting to finish */}
+        <h1 className="hero-headline">
+          <SmoothTextReveal
+            text={headline}
+            baseDelay={headlineDelay}
+            charSpeed={0.015}
+          />
+        </h1>
 
-        {/* Step 4: Supporting sentence */}
-        <p className="hero-subline hero-animate-3">{subline}</p>
-
-        {/* Step 5: Work navigation */}
-        <div className="hero-actions hero-animate-4">
-          <a href={workLink.href} className="hero-link">
-            {workLink.label}
-          </a>
-        </div>
+        {/* Step 4: Supporting sentence - strictly waits for headline to finish */}
+        <p className="hero-subline">
+          <SmoothTextReveal
+            text={subline}
+            baseDelay={sublineDelay}
+            charSpeed={0.015}
+          />
+        </p>
       </div>
     </section>
   );
 };
+

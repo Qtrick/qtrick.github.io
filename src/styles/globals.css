@@ -153,6 +153,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
   max-width: 100vw;
   width: 100%;
 }
@@ -204,6 +206,21 @@ main,
 .skip-link:focus,
 .skip-to-content:focus {
   top: 1.5rem;
+}
+
+/* Screen Reader Only Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Focus styles */

@@ -43,6 +43,13 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- Critical Layout Stability: reserve scrollbar gutter from frame 0 -->
+    <style>
+      html {
+        overflow-y: scroll;
+        scrollbar-gutter: stable;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

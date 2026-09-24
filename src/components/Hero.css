@@ -158,74 +158,12 @@
   font-size: clamp(1.0625rem, 0.8vw + 0.85rem, 1.25rem);
   color: var(--text-secondary);
   line-height: 1.55;
-  margin: 0 0 clamp(1.5rem, 2.2vh, 2rem) 0;
+  margin: 0;
   max-width: min(100%, 64ch);
-}
-
-/* Step 5: Hero actions */
-.hero-actions {
-  display: flex;
-  align-items: center;
-}
-
-.hero-link {
-  font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.0625rem);
-  font-weight: 500;
-  color: var(--text-primary);
-  text-decoration: none;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--border-strong);
-  transition: all var(--transition-fast);
-}
-
-.hero-link:hover {
-  border-bottom-color: var(--text-primary);
-  opacity: 0.75;
-}
-
-/* Deterministic Settle Entrance (750ms duration, smooth easing) */
-.hero-animate-1 {
-  opacity: 0;
-  animation: heroSettle 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
-}
-
-.hero-animate-2 {
-  opacity: 0;
-  animation: heroSettle 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.22s forwards;
-}
-
-.hero-animate-3 {
-  opacity: 0;
-  animation: heroSettle 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.38s forwards;
-}
-
-.hero-animate-4 {
-  opacity: 0;
-  animation: heroSettle 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.54s forwards;
-}
-
-@keyframes heroSettle {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-aura {
-    animation: none !important;
-  }
-
-  .hero-animate-1,
-  .hero-animate-2,
-  .hero-animate-3,
-  .hero-animate-4 {
-    opacity: 1 !important;
-    transform: none !important;
     animation: none !important;
   }
 }

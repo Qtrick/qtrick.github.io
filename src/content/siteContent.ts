@@ -12,7 +12,6 @@ export const siteContent: SiteContent = {
   ownerName: 'David Fan',
 
   navigation: [
-    { label: 'Work', href: '#work' },
     { label: 'About', href: '#about' },
   ],
 
@@ -24,12 +23,8 @@ export const siteContent: SiteContent = {
 
   hero: {
     greeting: "Hi, I'm David.",
-    headline: "I'm a biology student at UMass Amherst who likes building things.",
+    headline: "I'm a biology student at UMass Amherst who likes building.",
     subline: "Right now, I'm working on PreBase and Coreside.",
-    workLink: {
-      label: 'Work ↓',
-      href: '#work',
-    },
   },
 
   work: {
@@ -56,7 +51,7 @@ export const siteContent: SiteContent = {
     sectionTitle: 'About',
     bio: [
       'I like figuring out how things work, then trying to build them myself.',
-      'Outside of class, I enjoy listening to classical music and doing volunteer work for local communities. I also compete on the U.S. Wushu Team.',
+      'Outside of class, I listen to classical music, do volunteer work for local communities, and compete on the U.S. Wushu Team.',
     ],
   },
 

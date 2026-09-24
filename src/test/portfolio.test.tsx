@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import App from '../App';
 import { siteContent } from '../content/siteContent';
+import { calculateSequentialDelays } from '../components/SmoothTextReveal';
 
 describe('David Fan Portfolio Site', () => {
   beforeEach(() => {
@@ -55,16 +56,14 @@ describe('David Fan Portfolio Site', () => {
       expect(allLinkedIn).toHaveLength(1);
     });
 
-    it('renders primary navigation items Work and About', () => {
+    it('renders primary navigation item About and excludes Work from navigation', () => {
       render(<App />);
-      expect(screen.getByRole('link', { name: 'Work' })).toHaveAttribute(
-        'href',
-        '#work'
-      );
       expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
         'href',
         '#about'
       );
+      // Work navigation item must be completely removed from top nav
+      expect(screen.queryByRole('link', { name: 'Work' })).not.toBeInTheDocument();
     });
   });
 
@@ -125,15 +124,16 @@ describe('David Fan Portfolio Site', () => {
       const allText = container.textContent || '';
       expect(allText).not.toMatch(/DAVID FAN/);
 
-      // Core personal headline and subline are rendered
+      // Core personal headline uses "building" not "building things"
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-        siteContent.hero.headline
+        "I'm a biology student at UMass Amherst who likes building."
       );
+      expect(container.textContent).not.toContain('building things');
       expect(screen.getByText(siteContent.hero.subline)).toBeInTheDocument();
 
-      // Hero only has single Work link, no repeated social icons
-      const heroWorkLink = screen.getByRole('link', { name: 'Work ↓' });
-      expect(heroWorkLink).toHaveAttribute('href', '#work');
+      // Hero does NOT contain Work, Work ↓, or any scroll CTA button
+      expect(screen.queryByText(/Work ↓/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: /Work/i })).not.toBeInTheDocument();
     });
 
     it('renders slow ambient animated background confined to hero section', () => {
@@ -232,14 +232,16 @@ describe('David Fan Portfolio Site', () => {
   });
 
   describe('About Section', () => {
-    it('mentions classical music and local community volunteering in student tone', () => {
+    it('mentions exact outside-of-class sentence in student tone', () => {
       render(<App />);
 
       expect(
-        screen.getByText(/I enjoy listening to classical music/i)
+        screen.getByText('I like figuring out how things work, then trying to build them myself.')
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/doing volunteer work for local communities/i)
+        screen.getByText(
+          'Outside of class, I listen to classical music, do volunteer work for local communities, and compete on the U.S. Wushu Team.'
+        )
       ).toBeInTheDocument();
     });
 
@@ -323,6 +325,38 @@ describe('David Fan Portfolio Site', () => {
       expect(aboutSection).toHaveClass('is-revealed');
 
       matchMediaSpy.mockRestore();
+    });
+
+    it('ensures text reveals in intro and about sections are strictly sequential and never parallel', () => {
+      const heroTexts = [
+        siteContent.hero.greeting,
+        siteContent.hero.headline,
+        siteContent.hero.subline,
+      ];
+      const heroDelays = calculateSequentialDelays(heroTexts, {
+        initialDelay: 0.08,
+        charSpeed: 0.015,
+        fadeDuration: 0.18,
+        pauseBetween: 0.04,
+      });
+
+      // Greeting finishes before Headline starts
+      const greetingDuration = heroTexts[0].length * 0.015 + 0.18;
+      expect(heroDelays[1]).toBeGreaterThanOrEqual(heroDelays[0] + greetingDuration);
+
+      // Headline finishes before Subline starts
+      const headlineDuration = heroTexts[1].length * 0.015 + 0.18;
+      expect(heroDelays[2]).toBeGreaterThanOrEqual(heroDelays[1] + headlineDuration);
+
+      // About paragraph 1 finishes before paragraph 2 starts
+      const aboutDelays = calculateSequentialDelays(siteContent.about.bio, {
+        initialDelay: 0.06,
+        charSpeed: 0.012,
+        fadeDuration: 0.18,
+        pauseBetween: 0.05,
+      });
+      const bio0Duration = siteContent.about.bio[0].length * 0.012 + 0.18;
+      expect(aboutDelays[1]).toBeGreaterThanOrEqual(aboutDelays[0] + bio0Duration);
     });
   });
 });

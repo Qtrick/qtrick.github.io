@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { SmoothTextReveal, calculateSequentialDelays } from './SmoothTextReveal';
 import './AboutSection.css';
 
 interface AboutSectionProps {
@@ -20,6 +21,16 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     onReveal: onRevealed,
   });
 
+  // Strictly sequential delays: bio[1] waits for bio[0] to fully finish
+  const bioDelays = useMemo(() => {
+    return calculateSequentialDelays(bio, {
+      initialDelay: 0.06,
+      charSpeed: 0.012,
+      fadeDuration: 0.18,
+      pauseBetween: 0.05,
+    });
+  }, [bio]);
+
   return (
     <section
       ref={ref}
@@ -39,7 +50,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 key={idx}
                 className={`about-paragraph reveal-item about-paragraph-${idx + 1}`}
               >
-                {paragraph}
+                <SmoothTextReveal
+                  text={paragraph}
+                  baseDelay={bioDelays[idx]}
+                  charSpeed={0.012}
+                  animate={isRevealed}
+                />
               </p>
             ))}
           </div>

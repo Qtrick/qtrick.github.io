@@ -32,10 +32,6 @@ export interface SiteContent {
     greeting: string;
     headline: string;
     subline: string;
-    workLink: {
-      label: string;
-      href: string;
-    };
   };
   work: {
     sectionTitle: string;
