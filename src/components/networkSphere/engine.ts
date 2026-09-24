@@ -354,7 +354,9 @@ export class SphereEngine {
     const dy = e.clientY - this.lastPointer.y;
     this.lastPointer = { x: e.clientX, y: e.clientY };
     const stepY = dx * this.dragSensitivity;
-    const stepX = dy * this.dragSensitivity;
+    // Vertical drag is inverted so dragging down pitches the sphere's near
+    // side downward (grab-and-pull feel). Horizontal mapping is unchanged.
+    const stepX = -dy * this.dragSensitivity;
     this.rotation.y += stepY;
     this.rotation.x = clampPitch(this.rotation.x + stepX);
     // Track release velocity with an exponential moving average.

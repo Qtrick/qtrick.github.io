@@ -212,8 +212,10 @@ describe('sphere engine', () => {
     expect(engine.isDragging()).toBe(true);
     dispatchPointer(canvas, 'pointermove', 140, 120);
     const mid = engine.getRotation();
+    // Horizontal drag unchanged: drag right yaws right.
     expect(mid.y).toBeGreaterThan(start.y);
-    expect(mid.x).toBeGreaterThan(start.x);
+    // Vertical drag is inverted: drag down pitches the near side down.
+    expect(mid.x).toBeLessThan(start.x);
 
     dispatchPointer(canvas, 'pointerup', 140, 120);
     expect(engine.isDragging()).toBe(false);
@@ -318,7 +320,7 @@ describe('NetworkSphere component', () => {
       /Interactive network sphere. Drag to rotate/i
     );
     expect(canvas.tagName).toBe('CANVAS');
-    expect(screen.getByText('drag to rotate')).toBeInTheDocument();
+    expect(screen.getByText('• Drag to rotate')).toBeInTheDocument();
   });
 
   it('canvas is keyboard-focusable with arrow controls', () => {

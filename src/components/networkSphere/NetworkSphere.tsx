@@ -89,7 +89,7 @@ export const NetworkSphere: React.FC = () => {
         aria-label="Interactive network sphere. Drag to rotate. Use arrow keys to rotate."
       />
       <p className="sphere-hint" aria-hidden="true">
-        drag to rotate
+        • Drag to rotate
       </p>
     </div>
   );
