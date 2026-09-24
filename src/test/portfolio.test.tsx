@@ -48,12 +48,23 @@ describe('David Fan Portfolio Site', () => {
     });
   });
 
+  it('completely excludes Tech Regalia from the entire site', () => {
+    const { container } = render(<App />);
+    expect(container.textContent).not.toContain('Tech Regalia');
+    expect(screen.queryByText(/Tech Regalia/i)).not.toBeInTheDocument();
+  });
+
+  it('contains ZERO em dashes in any user-facing text', () => {
+    const { container } = render(<App />);
+    expect(container.textContent).not.toContain('—');
+  });
+
   it('toggles between PreBase and Coreside projects with tabs and smooth transitions', async () => {
     render(<App />);
 
     // By default, PreBase is active
     expect(screen.getByRole('heading', { level: 3, name: 'PreBase' })).toBeInTheDocument();
-    expect(screen.getByText(/A codebase-mapping IDE/i)).toBeInTheDocument();
+    expect(screen.getByText(/An editor that maps out codebases visually/i)).toBeInTheDocument();
     expect(screen.getByText('Code-OSS')).toBeInTheDocument();
 
     const prebaseTab = screen.getByRole('tab', { name: 'PreBase' });
@@ -75,7 +86,7 @@ describe('David Fan Portfolio Site', () => {
     });
 
     expect(
-      screen.getByText(/A desktop environment where conversations become interactive tools/i)
+      screen.getByText(/A desktop app that turns plain text into little tools/i)
     ).toBeInTheDocument();
     expect(screen.getByText('Tauri 2')).toBeInTheDocument();
     expect(screen.getByText('Rust')).toBeInTheDocument();
@@ -124,7 +135,7 @@ describe('David Fan Portfolio Site', () => {
 
       // Check contextual detail
       expect(
-        screen.getByText(/Runs local dev servers and frontend previews directly beside source files/i)
+        screen.getByText(/Runs a local preview right beside the code you are editing/i)
       ).toBeInTheDocument();
 
       // Click Agents node
@@ -133,7 +144,7 @@ describe('David Fan Portfolio Site', () => {
 
       expect(agentsNode).toHaveAttribute('aria-pressed', 'true');
       expect(
-        screen.getByText(/AI assistant integrated with the editor workspace, informed by codebase graphs/i)
+        screen.getByText(/An assistant integrated into the editor that reads the code map/i)
       ).toBeInTheDocument();
     });
 
@@ -145,7 +156,7 @@ describe('David Fan Portfolio Site', () => {
 
       expect(parserNode).toHaveAttribute('aria-pressed', 'true');
       expect(
-        screen.getByText(/Extracts syntax trees to identify symbols/i)
+        screen.getByText(/Reads source files to find imports, exports, and function calls/i)
       ).toBeInTheDocument();
     });
   });
@@ -163,8 +174,8 @@ describe('David Fan Portfolio Site', () => {
       });
 
       // NO tool visible by default
-      expect(screen.queryByText(/Live Local Tool/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Completed sessions/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Working tool/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Glasses today/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Cost per person/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/completed/i)).not.toBeInTheDocument();
 
@@ -187,16 +198,16 @@ describe('David Fan Portfolio Site', () => {
 
       // Phase 1 -> 2: Agent working
       act(() => {
-        vi.advanceTimersByTime(250);
+        vi.advanceTimersByTime(200);
       });
-      expect(screen.getByText(/Coreside Agent/i)).toBeInTheDocument();
+      expect(screen.getByText(/Building tool.../i)).toBeInTheDocument();
 
       // Phase 2 -> 3: Tool ready
       act(() => {
-        vi.advanceTimersByTime(1200);
+        vi.advanceTimersByTime(700);
       });
 
-      expect(screen.getByText(/Live Local Tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Try another prompt/i })).toBeInTheDocument();
 
       vi.useRealTimers();
@@ -209,10 +220,10 @@ describe('David Fan Portfolio Site', () => {
       fireEvent.click(promptBtn);
 
       act(() => {
-        vi.advanceTimersByTime(1500);
+        vi.advanceTimersByTime(900);
       });
 
-      expect(screen.getByText(/Live Local Tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
 
       // Check whichever tool was rendered
       const increaseWaterBtn = screen.queryByRole('button', { name: /Increase glasses/i });
@@ -254,7 +265,7 @@ describe('David Fan Portfolio Site', () => {
       fireEvent.click(promptBtn);
 
       // Instantly reaches ready without timers
-      expect(screen.getByText(/Live Local Tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
 
       matchMediaSpy.mockRestore();
     });
@@ -266,17 +277,17 @@ describe('David Fan Portfolio Site', () => {
       fireEvent.click(promptBtn);
 
       act(() => {
-        vi.advanceTimersByTime(1500);
+        vi.advanceTimersByTime(900);
       });
 
-      expect(screen.getByText(/Live Local Tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
 
       // Click replay
       const replayBtn = screen.getByRole('button', { name: /Try another prompt/i });
       fireEvent.click(replayBtn);
 
       // Should be back to idle state with no tool
-      expect(screen.queryByText(/Live Local Tool/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Working tool/i)).not.toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Run prompt/i })).toBeInTheDocument();
 
       vi.useRealTimers();
@@ -343,3 +354,4 @@ describe('David Fan Portfolio Site', () => {
     expect(ambientBg).toHaveAttribute('aria-hidden', 'true');
   });
 });
+

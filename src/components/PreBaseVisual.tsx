@@ -18,43 +18,43 @@ const PREBASE_NODES: PreBaseNode[] = [
     sublabel: 'Code-OSS Host',
     x: 50,
     y: 32,
-    detail: 'Forked from Code-OSS 1.128, providing the full editor workbench and extension host.',
+    detail: 'The main editor window, forked from Code-OSS to run extensions and handle files.',
     connectedTo: ['graph', 'runtime', 'agents'],
   },
   {
     id: 'graph',
     name: 'Architecture Map',
-    sublabel: 'Graph Engine',
+    sublabel: 'Code Map',
     x: 22,
     y: 24,
-    detail: 'Maps code relationships, imports, and module dependencies into a spatial canvas.',
+    detail: 'Shows files, imports, and dependencies as an interactive map instead of just a folder tree.',
     connectedTo: ['workbench', 'parser', 'temporal'],
   },
   {
     id: 'runtime',
     name: 'Runtime Preview',
-    sublabel: 'In-IDE Browser',
+    sublabel: 'Browser View',
     x: 78,
     y: 24,
-    detail: 'Runs local dev servers and frontend previews directly beside source files.',
+    detail: 'Runs a local preview right beside the code you are editing.',
     connectedTo: ['workbench'],
   },
   {
     id: 'agents',
     name: 'Agents',
-    sublabel: 'Context AI',
+    sublabel: 'Workspace',
     x: 80,
     y: 74,
-    detail: 'AI assistant integrated with the editor workspace, informed by codebase graphs.',
+    detail: 'An assistant integrated into the editor that reads the code map to understand how files connect.',
     connectedTo: ['workbench'],
   },
   {
     id: 'parser',
     name: 'AST Parser',
-    sublabel: 'Syntax Engine',
+    sublabel: 'Syntax',
     x: 18,
     y: 74,
-    detail: 'Extracts syntax trees to identify symbols, cross-file imports, and call hierarchies.',
+    detail: 'Reads source files to find imports, exports, and function calls.',
     connectedTo: ['graph'],
   },
   {
@@ -63,7 +63,7 @@ const PREBASE_NODES: PreBaseNode[] = [
     sublabel: 'Git History',
     x: 48,
     y: 78,
-    detail: 'Correlates commit timelines with codebase architecture to track structural evolution.',
+    detail: 'Tracks how files and connections changed over time across git commits.',
     connectedTo: ['graph'],
   },
 ];
@@ -83,10 +83,10 @@ export const PreBaseVisual: React.FC = () => {
     <div className="project-visual-card prebase-visual" role="region" aria-label="PreBase Interactive Architecture Canvas">
       <div className="visual-top-bar">
         <div className="visual-title-group">
-          <span className="visual-tag">PreBase Architecture</span>
-          <span className="visual-subtag">Code-OSS + Spatial Graph</span>
+          <span className="visual-tag">PreBase Demo</span>
+          <span className="visual-subtag">Code-OSS + Code Map</span>
         </div>
-        <span className="visual-hint">Click a module to inspect relationships</span>
+        <span className="visual-hint">Click a module to see its connections</span>
       </div>
 
       {/* Interactive Node Graph Canvas */}
@@ -107,7 +107,7 @@ export const PreBaseVisual: React.FC = () => {
                 return null;
               }
 
-              const highlighted = isEdgeConnected(source.id, target.id);
+              const highlighted = isEdgeConnected(source.id, targetId);
 
               return (
                 <line
@@ -160,7 +160,7 @@ export const PreBaseVisual: React.FC = () => {
         </div>
         <p className="context-detail">{selectedNode.detail}</p>
         <div className="context-links">
-          <span className="context-links-label">Connected:</span>
+          <span className="context-links-label">Connected to:</span>
           {selectedNode.connectedTo.map((targetId) => {
             const target = PREBASE_NODES.find((n) => n.id === targetId);
             if (!target) return null;
@@ -181,3 +181,4 @@ export const PreBaseVisual: React.FC = () => {
     </div>
   );
 };
+

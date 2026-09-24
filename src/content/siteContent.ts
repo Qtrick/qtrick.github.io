@@ -1,7 +1,3 @@
-/* CONTENT IS PROVISIONAL.
-   This portfolio is intentionally content-driven so David can rewrite any copy easily.
-   Keep sentences simple, honest, and personal. */
-
 import { SiteContent } from '../types';
 
 export const siteContent: SiteContent = {
@@ -21,8 +17,8 @@ export const siteContent: SiteContent = {
 
   hero: {
     name: 'David Fan',
-    headline: 'I’m a biology student at UMass Amherst who likes building things.',
-    subline: 'Currently building PreBase and Coreside.',
+    headline: "I'm a biology student at UMass Amherst who likes building things.",
+    subline: "Right now, I'm working on PreBase and Coreside.",
     links: [
       { label: 'Work ↓', href: '#work' },
       { label: 'GitHub ↗', href: 'https://github.com/Qtrick', external: true },
@@ -36,9 +32,9 @@ export const siteContent: SiteContent = {
       {
         id: 'prebase',
         name: 'PreBase',
-        tagline: 'A codebase-mapping IDE for exploring software architecture.',
+        tagline: 'An editor that maps out codebases visually.',
         description:
-          'Built on Code-OSS, PreBase maps code relationships and dependencies into an interactive visual graph directly inside the editor so you can navigate codebases spatially.',
+          'I wanted a better way to see how files and functions connect while reading code. Built on Code-OSS, PreBase turns code relationships into an interactive map right inside the editor.',
         role: 'Co-founder',
         status: 'In development',
         technologies: ['TypeScript', 'Code-OSS', 'Electron', 'Graphs'],
@@ -47,9 +43,9 @@ export const siteContent: SiteContent = {
       {
         id: 'coreside',
         name: 'Coreside',
-        tagline: 'A desktop environment where conversations become interactive tools.',
+        tagline: 'A desktop app that turns plain text into little tools.',
         description:
-          'You ask for a capability—like a tracker, checklist, or calculator—and Coreside turns your prompt into a declarative tool that persists locally in SQLite.',
+          'You describe what you need, like a water tracker, a checklist, or a simple calculator. Coreside turns that prompt into an interactive tool that stays saved on your computer.',
         role: 'Creator',
         status: 'In development',
         technologies: ['Rust', 'Tauri 2', 'React', 'SQLite'],
@@ -61,8 +57,8 @@ export const siteContent: SiteContent = {
   about: {
     sectionTitle: 'About',
     bio: [
-      'I study biology at UMass Amherst and spend most of my free time building software.',
-      'Outside of school and coding, I compete on the U.S. Wushu Team representing the United States in international kung-fu competitions, and co-founded Tech Regalia.',
+      'I like figuring out how things work, then trying to build them myself.',
+      'Outside of software, I compete on the U.S. Wushu Team.',
     ],
     email: 'davidwfan26@gmail.com',
     links: [
@@ -88,3 +84,4 @@ export const siteContent: SiteContent = {
     copyright: 'David Fan · 2026',
   },
 };
+

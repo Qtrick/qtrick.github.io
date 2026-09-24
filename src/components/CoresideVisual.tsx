@@ -14,29 +14,29 @@ export const DEMO_PROMPTS: DemoPrompt[] = [
     text: 'Build me a water tracker.',
     toolTitle: 'Water Tracker',
     agentSteps: [
-      'Understanding request: daily hydration goal',
-      'Configuring counter & progress components',
-      'Persisting schema in local SQLite',
+      'Setting up a daily counter',
+      'Adding plus and minus controls',
+      'Saving layout to local database',
     ],
   },
   {
     id: 'checklist',
-    text: 'Make me a checklist for my week.',
+    text: 'Make me a checklist for the week.',
     toolTitle: 'Weekly Checklist',
     agentSteps: [
-      'Structuring task list schema',
-      'Generating toggleable task items',
-      'Saving active tasks to local SQLite',
+      'Creating task items',
+      'Adding checkbox toggles',
+      'Saving list to local database',
     ],
   },
   {
     id: 'expense',
-    text: 'Create an expense splitter for four people.',
+    text: 'Create an expense splitter.',
     toolTitle: 'Expense Splitter',
     agentSteps: [
-      'Setting bill & member division logic',
-      'Binding interactive rate adjusters',
-      'Synthesizing declarative tool',
+      'Setting up bill and people inputs',
+      'Calculating cost per person',
+      'Saving tool to local database',
     ],
   },
 ];
@@ -56,20 +56,19 @@ export const CoresideVisual: React.FC = () => {
   // Tool 1: Water Tracker State
   const [waterGlasses, setWaterGlasses] = useState(3);
 
-  // Tool 2: Checklist State
+  // Tool 2: Checklist State (General, everyday tasks)
   const [checklistItems, setChecklistItems] = useState([
-    { id: 1, text: 'Review biology lecture notes', done: true },
-    { id: 2, text: 'Verify PreBase graph parser', done: true },
-    { id: 3, text: 'U.S. Wushu team training routine', done: false },
-    { id: 4, text: 'Test Coreside Tauri 2 SQLite sync', done: false },
+    { id: 1, text: 'Pick up groceries', done: true },
+    { id: 2, text: 'Pay electric bill', done: true },
+    { id: 3, text: 'Schedule dentist appointment', done: false },
+    { id: 4, text: 'Water the plants', done: false },
   ]);
 
   // Tool 3: Expense Splitter State
   const [billAmount, setBillAmount] = useState(120);
   const [peopleCount, setPeopleCount] = useState(4);
 
-
-  // Handle clicking the prompt to begin synthesis
+  // Handle clicking the prompt to begin building the tool
   const handleExecutePrompt = () => {
     if (phase !== 'idle') return;
 
@@ -84,20 +83,20 @@ export const CoresideVisual: React.FC = () => {
 
     setPhase('submitting');
 
-    // Phase 1 -> Phase 2 transition (~200ms)
+    // Prompt transition: 140ms
     setTimeout(() => {
       setPhase('working');
       setActiveStepIndex(0);
 
-      // Stagger agent steps (~400ms each)
-      setTimeout(() => setActiveStepIndex(1), 350);
-      setTimeout(() => setActiveStepIndex(2), 700);
+      // Stagger agent steps (180ms each)
+      setTimeout(() => setActiveStepIndex(1), 180);
+      setTimeout(() => setActiveStepIndex(2), 360);
 
-      // Phase 2 -> Phase 3 transition (~1050ms total)
+      // Transition to ready tool (~680ms total from click)
       setTimeout(() => {
         setPhase('ready');
-      }, 1050);
-    }, 200);
+      }, 540);
+    }, 140);
   };
 
   // Replay: pick a DIFFERENT prompt and reset
@@ -108,10 +107,10 @@ export const CoresideVisual: React.FC = () => {
     // Reset tool states to pristine defaults
     setWaterGlasses(3);
     setChecklistItems([
-      { id: 1, text: 'Review biology lecture notes', done: true },
-      { id: 2, text: 'Verify PreBase graph parser', done: true },
-      { id: 3, text: 'U.S. Wushu team training routine', done: false },
-      { id: 4, text: 'Test Coreside Tauri 2 SQLite sync', done: false },
+      { id: 1, text: 'Pick up groceries', done: true },
+      { id: 2, text: 'Pay electric bill', done: true },
+      { id: 3, text: 'Schedule dentist appointment', done: false },
+      { id: 4, text: 'Water the plants', done: false },
     ]);
     setBillAmount(120);
     setPeopleCount(4);
@@ -138,8 +137,8 @@ export const CoresideVisual: React.FC = () => {
     >
       <div className="visual-top-bar">
         <div className="visual-title-group">
-          <span className="visual-tag">Coreside Environment</span>
-          <span className="visual-subtag">Prompt → Declarative Tool</span>
+          <span className="visual-tag">Coreside Demo</span>
+          <span className="visual-subtag">Prompt to tool</span>
         </div>
         {phase === 'ready' ? (
           <button
@@ -151,7 +150,7 @@ export const CoresideVisual: React.FC = () => {
             Try another prompt ↺
           </button>
         ) : (
-          <span className="visual-hint">Click the prompt to synthesize</span>
+          <span className="visual-hint">Click the prompt to try it</span>
         )}
       </div>
 
@@ -173,9 +172,9 @@ export const CoresideVisual: React.FC = () => {
           aria-label={phase === 'idle' ? `Run prompt: ${prompt.text}` : undefined}
         >
           <div className="prompt-header">
-            <span className="prompt-user-badge">User Prompt</span>
+            <span className="prompt-user-badge">Prompt</span>
             {phase === 'idle' && (
-              <span className="prompt-cta-hint">Click to build tool →</span>
+              <span className="prompt-cta-hint">Click to build →</span>
             )}
           </div>
           <p className="prompt-quote">“{prompt.text}”</p>
@@ -189,7 +188,7 @@ export const CoresideVisual: React.FC = () => {
           >
             {phase === 'working' ? (
               <div className="agent-steps-list">
-                <span className="agent-tray-label">Coreside Agent</span>
+                <span className="agent-tray-label">Building tool...</span>
                 {prompt.agentSteps.map((step, idx) => (
                   <div
                     key={step}
@@ -206,7 +205,7 @@ export const CoresideVisual: React.FC = () => {
               <div className="agent-success-badge">
                 <span className="agent-success-icon">✓</span>
                 <span className="agent-success-text">
-                  Generated {prompt.toolTitle} · Saved to SQLite
+                  Created {prompt.toolTitle} · Saved locally
                 </span>
               </div>
             )}
@@ -226,7 +225,7 @@ export const CoresideVisual: React.FC = () => {
                 </span>
                 <span className="tool-title">{prompt.toolTitle}</span>
               </div>
-              <span className="tool-state-pill">Live Local Tool</span>
+              <span className="tool-state-pill">Working tool</span>
             </div>
 
             {/* Tool 1: Water Tracker */}
@@ -372,13 +371,14 @@ export const CoresideVisual: React.FC = () => {
       </div>
 
       <div className="visual-status-bar">
-        <span className="status-kind">Tauri 2 · Rust Core</span>
+        <span className="status-kind">Tauri 2 · Rust & React</span>
         <span className="status-name">
           {phase === 'ready'
-            ? 'Interactive tool active in local state'
-            : 'Declarative tool synthesis pipeline'}
+            ? 'Interactive tool running locally'
+            : 'Click the prompt to build a tool'}
         </span>
       </div>
     </div>
   );
 };
+
