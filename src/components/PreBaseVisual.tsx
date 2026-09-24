@@ -11,68 +11,68 @@ interface PreBaseNode {
   connectedTo: string[];
 }
 
-const PREBASE_NODES: PreBaseNode[] = [
+export const PREBASE_NODES: PreBaseNode[] = [
   {
-    id: 'workbench',
-    name: 'Workbench',
-    sublabel: 'Code-OSS Host',
+    id: 'app',
+    name: 'App.tsx',
+    sublabel: 'Main view',
     x: 50,
+    y: 26,
+    detail: 'Main view component. Imports Sidebar.tsx, UserProfile.tsx, and apiClient.ts.',
+    connectedTo: ['sidebar', 'userprofile', 'apiclient'],
+  },
+  {
+    id: 'sidebar',
+    name: 'Sidebar.tsx',
+    sublabel: 'Navigation',
+    x: 20,
     y: 32,
-    detail: 'The main editor window, forked from Code-OSS to run extensions and handle files.',
-    connectedTo: ['graph', 'runtime', 'agents'],
+    detail: 'Navigation sidebar. Renders page links and uses NavItem.tsx.',
+    connectedTo: ['app', 'navitem'],
   },
   {
-    id: 'graph',
-    name: 'Architecture Map',
-    sublabel: 'Code Map',
-    x: 22,
-    y: 24,
-    detail: 'Shows files, imports, and dependencies as an interactive map instead of just a folder tree.',
-    connectedTo: ['workbench', 'parser', 'temporal'],
-  },
-  {
-    id: 'runtime',
-    name: 'Runtime Preview',
-    sublabel: 'Browser View',
-    x: 78,
-    y: 24,
-    detail: 'Runs a local preview right beside the code you are editing.',
-    connectedTo: ['workbench'],
-  },
-  {
-    id: 'agents',
-    name: 'Agents',
-    sublabel: 'Workspace',
+    id: 'userprofile',
+    name: 'UserProfile.tsx',
+    sublabel: 'Profile card',
     x: 80,
-    y: 74,
-    detail: 'An assistant integrated into the editor that reads the code map to understand how files connect.',
-    connectedTo: ['workbench'],
+    y: 32,
+    detail: 'User profile widget. Calls apiClient.ts for user data and uses types from auth.ts.',
+    connectedTo: ['app', 'apiclient', 'auth'],
   },
   {
-    id: 'parser',
-    name: 'AST Parser',
-    sublabel: 'Syntax',
+    id: 'apiclient',
+    name: 'apiClient.ts',
+    sublabel: 'API client',
+    x: 74,
+    y: 74,
+    detail: 'Handles network requests and error handling. Used by App.tsx and UserProfile.tsx.',
+    connectedTo: ['app', 'userprofile', 'auth'],
+  },
+  {
+    id: 'auth',
+    name: 'auth.ts',
+    sublabel: 'Auth helpers',
+    x: 44,
+    y: 78,
+    detail: 'Manages authentication tokens, session headers, and auth type definitions.',
+    connectedTo: ['userprofile', 'apiclient'],
+  },
+  {
+    id: 'navitem',
+    name: 'NavItem.tsx',
+    sublabel: 'Link item',
     x: 18,
     y: 74,
-    detail: 'Reads source files to find imports, exports, and function calls.',
-    connectedTo: ['graph'],
-  },
-  {
-    id: 'temporal',
-    name: 'Temporal Index',
-    sublabel: 'Git History',
-    x: 48,
-    y: 78,
-    detail: 'Tracks how files and connections changed over time across git commits.',
-    connectedTo: ['graph'],
+    detail: 'Reusable navigation link item used by Sidebar.tsx.',
+    connectedTo: ['sidebar'],
   },
 ];
 
 export const PreBaseVisual: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string>('graph');
+  const [selectedId, setSelectedId] = useState<string>('app');
 
   const selectedNode =
-    PREBASE_NODES.find((node) => node.id === selectedId) || PREBASE_NODES[1];
+    PREBASE_NODES.find((node) => node.id === selectedId) || PREBASE_NODES[0];
 
   // Helper to check if an edge connects to the selected node
   const isEdgeConnected = (sourceId: string, targetId: string) => {
@@ -80,17 +80,21 @@ export const PreBaseVisual: React.FC = () => {
   };
 
   return (
-    <div className="project-visual-card prebase-visual" role="region" aria-label="PreBase Interactive Architecture Canvas">
+    <div
+      className="project-visual-card prebase-visual"
+      role="region"
+      aria-label="PreBase code map demo"
+    >
       <div className="visual-top-bar">
         <div className="visual-title-group">
-          <span className="visual-tag">PreBase Demo</span>
-          <span className="visual-subtag">Code-OSS + Code Map</span>
+          <span className="visual-tag">PreBase demo</span>
+          <span className="visual-subtag">Interactive code map</span>
         </div>
-        <span className="visual-hint">Click a module to see its connections</span>
+        <span className="visual-hint">Click a file to see its connections</span>
       </div>
 
       {/* Interactive Node Graph Canvas */}
-      <div className="prebase-graph-container" aria-label="Interactive module map">
+      <div className="prebase-graph-container" aria-label="Interactive file map">
         {/* SVG connection lines layer */}
         <svg
           className="prebase-graph-svg"
@@ -127,7 +131,9 @@ export const PreBaseVisual: React.FC = () => {
         <div className="prebase-nodes-layer">
           {PREBASE_NODES.map((node) => {
             const isSelected = selectedId === node.id;
-            const isConnected = selectedNode.connectedTo.includes(node.id) || node.connectedTo.includes(selectedId);
+            const isConnected =
+              selectedNode.connectedTo.includes(node.id) ||
+              node.connectedTo.includes(selectedId);
 
             return (
               <button
@@ -160,7 +166,7 @@ export const PreBaseVisual: React.FC = () => {
         </div>
         <p className="context-detail">{selectedNode.detail}</p>
         <div className="context-links">
-          <span className="context-links-label">Connected to:</span>
+          <span className="context-links-label">Connected files:</span>
           {selectedNode.connectedTo.map((targetId) => {
             const target = PREBASE_NODES.find((n) => n.id === targetId);
             if (!target) return null;
@@ -169,7 +175,7 @@ export const PreBaseVisual: React.FC = () => {
                 key={target.id}
                 type="button"
                 className="context-link-chip"
-                aria-label={`Inspect ${target.name}`}
+                aria-label={`Select ${target.name}`}
                 onClick={() => setSelectedId(target.id)}
               >
                 {target.name}
@@ -181,4 +187,3 @@ export const PreBaseVisual: React.FC = () => {
     </div>
   );
 };
-

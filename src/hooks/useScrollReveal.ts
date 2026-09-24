@@ -23,6 +23,13 @@ export function useScrollReveal<T extends HTMLElement>() {
       return;
     }
 
+    // If already in or near viewport on mount, reveal immediately
+    const rect = node.getBoundingClientRect();
+    if (rect.top <= (window.innerHeight || document.documentElement.clientHeight) + 80) {
+      setIsRevealed(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -33,8 +40,8 @@ export function useScrollReveal<T extends HTMLElement>() {
         });
       },
       {
-        threshold: 0.08,
-        rootMargin: '0px 0px -30px 0px',
+        threshold: 0.02,
+        rootMargin: '50px 0px 50px 0px',
       }
     );
 

@@ -35,8 +35,8 @@ export const siteContent: SiteContent = {
         tagline: 'An editor that maps out codebases visually.',
         description:
           'I wanted a better way to see how files and functions connect while reading code. Built on Code-OSS, PreBase turns code relationships into an interactive map right inside the editor.',
-        role: 'Co-founder',
-        status: 'In development',
+        role: 'Open source',
+        status: 'In progress',
         technologies: ['TypeScript', 'Code-OSS', 'Electron', 'Graphs'],
         githubUrl: 'https://github.com/Qtrick/prebasecode',
       },
@@ -46,8 +46,8 @@ export const siteContent: SiteContent = {
         tagline: 'A desktop app that turns plain text into little tools.',
         description:
           'You describe what you need, like a water tracker, a checklist, or a simple calculator. Coreside turns that prompt into an interactive tool that stays saved on your computer.',
-        role: 'Creator',
-        status: 'In development',
+        role: 'Personal project',
+        status: 'In progress',
         technologies: ['Rust', 'Tauri 2', 'React', 'SQLite'],
         githubUrl: 'https://github.com/Qtrick/coreside',
       },

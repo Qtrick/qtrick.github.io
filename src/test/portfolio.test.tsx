@@ -100,16 +100,16 @@ describe('David Fan Portfolio Site', () => {
   });
 
   describe('PreBase Visual Canvas', () => {
-    it('renders all architectural nodes as accessible buttons', () => {
+    it('renders all file nodes as accessible buttons', () => {
       render(<App />);
 
       const nodeNames = [
-        'Workbench',
-        'Architecture Map',
-        'Runtime Preview',
-        'Agents',
-        'AST Parser',
-        'Temporal Index',
+        'App.tsx',
+        'Sidebar.tsx',
+        'UserProfile.tsx',
+        'apiClient.ts',
+        'auth.ts',
+        'NavItem.tsx',
       ];
 
       nodeNames.forEach((name) => {
@@ -119,45 +119,56 @@ describe('David Fan Portfolio Site', () => {
       });
     });
 
-    it('clicking an architectural node updates selected state and contextual detail', async () => {
+    it('clicking a file node updates selected state and contextual detail', async () => {
       render(<App />);
 
-      // Default selected is Architecture Map
-      const mapNode = screen.getByRole('button', { name: /^Architecture Map/i });
-      expect(mapNode).toHaveAttribute('aria-pressed', 'true');
+      // Default selected is App.tsx
+      const appNode = screen.getByRole('button', { name: /^App\.tsx/i });
+      expect(appNode).toHaveAttribute('aria-pressed', 'true');
 
-      // Click Runtime Preview
-      const runtimeNode = screen.getByRole('button', { name: /^Runtime Preview/i });
-      fireEvent.click(runtimeNode);
+      // Click Sidebar.tsx
+      const sidebarNode = screen.getByRole('button', { name: /^Sidebar\.tsx/i });
+      fireEvent.click(sidebarNode);
 
-      expect(runtimeNode).toHaveAttribute('aria-pressed', 'true');
-      expect(mapNode).toHaveAttribute('aria-pressed', 'false');
+      expect(sidebarNode).toHaveAttribute('aria-pressed', 'true');
+      expect(appNode).toHaveAttribute('aria-pressed', 'false');
 
       // Check contextual detail
       expect(
-        screen.getByText(/Runs a local preview right beside the code you are editing/i)
+        screen.getByText(/Navigation sidebar\. Renders page links and uses NavItem\.tsx\./i)
       ).toBeInTheDocument();
 
-      // Click Agents node
-      const agentsNode = screen.getByRole('button', { name: /^Agents/i });
-      fireEvent.click(agentsNode);
+      // Click apiClient.ts node
+      const apiNode = screen.getByRole('button', { name: /^apiClient\.ts/i });
+      fireEvent.click(apiNode);
 
-      expect(agentsNode).toHaveAttribute('aria-pressed', 'true');
+      expect(apiNode).toHaveAttribute('aria-pressed', 'true');
       expect(
-        screen.getByText(/An assistant integrated into the editor that reads the code map/i)
+        screen.getByText(/Handles network requests and error handling\./i)
       ).toBeInTheDocument();
     });
 
     it('keyboard navigation (Enter key) updates selected node', () => {
       render(<App />);
 
-      const parserNode = screen.getByRole('button', { name: /^AST Parser/i });
-      fireEvent.click(parserNode);
+      const navItemNode = screen.getByRole('button', { name: /^NavItem\.tsx/i });
+      fireEvent.click(navItemNode);
 
-      expect(parserNode).toHaveAttribute('aria-pressed', 'true');
+      expect(navItemNode).toHaveAttribute('aria-pressed', 'true');
       expect(
-        screen.getByText(/Reads source files to find imports, exports, and function calls/i)
+        screen.getByText(/Reusable navigation link item used by Sidebar\.tsx\./i)
       ).toBeInTheDocument();
+    });
+
+    it('clicking a connected file chip updates selected node', () => {
+      render(<App />);
+
+      // Default is App.tsx, which connects to Sidebar.tsx, UserProfile.tsx, apiClient.ts
+      const sidebarChip = screen.getByRole('button', { name: /Select Sidebar\.tsx/i });
+      fireEvent.click(sidebarChip);
+
+      const sidebarNode = screen.getByRole('button', { name: /^Sidebar\.tsx/i });
+      expect(sidebarNode).toHaveAttribute('aria-pressed', 'true');
     });
   });
 
@@ -174,14 +185,14 @@ describe('David Fan Portfolio Site', () => {
       });
 
       // NO tool visible by default
-      expect(screen.queryByText(/Working tool/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/^Ready$/)).not.toBeInTheDocument();
       expect(screen.queryByText(/Glasses today/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Cost per person/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/completed/i)).not.toBeInTheDocument();
 
       // Exactly ONE prompt visible matching one of the 3 DEMO_PROMPTS
       const validPromptTexts = DEMO_PROMPTS.map((p) => p.text);
-      const promptCard = screen.getByRole('button', { name: /Run prompt/i });
+      const promptCard = screen.getByRole('button', { name: /Try prompt/i });
       expect(promptCard).toBeInTheDocument();
 
       const matchedPrompt = validPromptTexts.find((text) =>
@@ -193,7 +204,7 @@ describe('David Fan Portfolio Site', () => {
     it('executes prompt flow: click -> agent log -> generated interactive tool', async () => {
       vi.useFakeTimers();
 
-      const promptBtn = screen.getByRole('button', { name: /Run prompt/i });
+      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
       fireEvent.click(promptBtn);
 
       // Phase 1 -> 2: Agent working
@@ -207,7 +218,7 @@ describe('David Fan Portfolio Site', () => {
         vi.advanceTimersByTime(700);
       });
 
-      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Try another prompt/i })).toBeInTheDocument();
 
       vi.useRealTimers();
@@ -216,14 +227,14 @@ describe('David Fan Portfolio Site', () => {
     it('generated tool has a working interactive component', async () => {
       vi.useFakeTimers();
 
-      const promptBtn = screen.getByRole('button', { name: /Run prompt/i });
+      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
       fireEvent.click(promptBtn);
 
       act(() => {
         vi.advanceTimersByTime(900);
       });
 
-      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
 
       // Check whichever tool was rendered
       const increaseWaterBtn = screen.queryByRole('button', { name: /Increase glasses/i });
@@ -261,11 +272,11 @@ describe('David Fan Portfolio Site', () => {
         dispatchEvent: vi.fn(),
       }));
 
-      const promptBtn = screen.getByRole('button', { name: /Run prompt/i });
+      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
       fireEvent.click(promptBtn);
 
       // Instantly reaches ready without timers
-      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
 
       matchMediaSpy.mockRestore();
     });
@@ -273,22 +284,22 @@ describe('David Fan Portfolio Site', () => {
     it('replay resets the flow to a clean prompt with no generated tool', async () => {
       vi.useFakeTimers();
 
-      const promptBtn = screen.getByRole('button', { name: /Run prompt/i });
+      const promptBtn = screen.getByRole('button', { name: /Try prompt/i });
       fireEvent.click(promptBtn);
 
       act(() => {
         vi.advanceTimersByTime(900);
       });
 
-      expect(screen.getByText(/Working tool/i)).toBeInTheDocument();
+      expect(screen.getByText(/^Ready$/)).toBeInTheDocument();
 
       // Click replay
       const replayBtn = screen.getByRole('button', { name: /Try another prompt/i });
       fireEvent.click(replayBtn);
 
       // Should be back to idle state with no tool
-      expect(screen.queryByText(/Working tool/i)).not.toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Run prompt/i })).toBeInTheDocument();
+      expect(screen.queryByText(/^Ready$/)).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Try prompt/i })).toBeInTheDocument();
 
       vi.useRealTimers();
     });

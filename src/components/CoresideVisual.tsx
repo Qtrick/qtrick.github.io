@@ -15,8 +15,8 @@ export const DEMO_PROMPTS: DemoPrompt[] = [
     toolTitle: 'Water Tracker',
     agentSteps: [
       'Setting up a daily counter',
-      'Adding plus and minus controls',
-      'Saving layout to local database',
+      'Adding + and − buttons',
+      'Saving layout locally',
     ],
   },
   {
@@ -24,9 +24,9 @@ export const DEMO_PROMPTS: DemoPrompt[] = [
     text: 'Make me a checklist for the week.',
     toolTitle: 'Weekly Checklist',
     agentSteps: [
-      'Creating task items',
+      'Adding tasks',
       'Adding checkbox toggles',
-      'Saving list to local database',
+      'Saving list locally',
     ],
   },
   {
@@ -36,7 +36,7 @@ export const DEMO_PROMPTS: DemoPrompt[] = [
     agentSteps: [
       'Setting up bill and people inputs',
       'Calculating cost per person',
-      'Saving tool to local database',
+      'Saving tool locally',
     ],
   },
 ];
@@ -133,11 +133,11 @@ export const CoresideVisual: React.FC = () => {
     <div
       className="project-visual-card coreside-visual"
       role="region"
-      aria-label="Coreside Prompt to Tool Demo"
+      aria-label="Coreside prompt to tool demo"
     >
       <div className="visual-top-bar">
         <div className="visual-title-group">
-          <span className="visual-tag">Coreside Demo</span>
+          <span className="visual-tag">Coreside demo</span>
           <span className="visual-subtag">Prompt to tool</span>
         </div>
         {phase === 'ready' ? (
@@ -169,12 +169,12 @@ export const CoresideVisual: React.FC = () => {
           }}
           tabIndex={phase === 'idle' ? 0 : -1}
           role={phase === 'idle' ? 'button' : undefined}
-          aria-label={phase === 'idle' ? `Run prompt: ${prompt.text}` : undefined}
+          aria-label={phase === 'idle' ? `Try prompt: ${prompt.text}` : undefined}
         >
           <div className="prompt-header">
             <span className="prompt-user-badge">Prompt</span>
             {phase === 'idle' && (
-              <span className="prompt-cta-hint">Click to build →</span>
+              <span className="prompt-cta-hint">Click to try →</span>
             )}
           </div>
           <p className="prompt-quote">“{prompt.text}”</p>
@@ -225,7 +225,7 @@ export const CoresideVisual: React.FC = () => {
                 </span>
                 <span className="tool-title">{prompt.toolTitle}</span>
               </div>
-              <span className="tool-state-pill">Working tool</span>
+              <span className="tool-state-pill">Ready</span>
             </div>
 
             {/* Tool 1: Water Tracker */}

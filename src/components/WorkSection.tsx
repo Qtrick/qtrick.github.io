@@ -39,7 +39,7 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
           <h2 className="work-title">{sectionTitle}</h2>
 
           {/* Project Toggle Tabs */}
-          <div className="project-toggle" role="tablist" aria-label="Selected Projects">
+          <div className="project-toggle" role="tablist" aria-label="Projects">
             {projects.map((project) => {
               const isSelected = project.id === activeId;
               return (

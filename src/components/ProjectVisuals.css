@@ -150,6 +150,7 @@
 }
 
 .node-btn-name {
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.2;
@@ -180,6 +181,7 @@
 }
 
 .context-name {
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -216,6 +218,7 @@
 }
 
 .context-link-chip {
+  font-family: var(--font-mono);
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: 4px;
