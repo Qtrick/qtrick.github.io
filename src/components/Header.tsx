@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { NavItem, SocialLinks } from '../types';
 import { GitHubIcon, LinkedInIcon } from './Icons';
@@ -21,11 +21,21 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [copied, setCopied] = useState(false);
+  const scrollTicking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      // Coalesce rapid scroll events into one state update per frame and
+      // skip re-renders when the scrolled flag has not actually changed.
+      if (scrollTicking.current) return;
+      scrollTicking.current = true;
+      requestAnimationFrame(() => {
+        scrollTicking.current = false;
+        const next = window.scrollY > 15;
+        setIsScrolled((prev) => (prev === next ? prev : next));
+      });
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

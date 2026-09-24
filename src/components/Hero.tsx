@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SmoothTextReveal, calculateSequentialDelays } from './SmoothTextReveal';
 import './Hero.css';
 
@@ -23,10 +23,34 @@ export const Hero: React.FC<HeroProps> = ({
     });
   }, [greeting, headline, subline]);
 
+  // Pause the ambient background drift when the hero scrolls out of view.
+  // This stops constant repaints from competing with scroll compositing.
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isAmbientPaused, setIsAmbientPaused] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsAmbientPaused((prev) => {
+          const next = !entry.isIntersecting;
+          return prev === next ? prev : next;
+        });
+      },
+      { threshold: 0 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="hero-section" aria-label="Introduction">
+    <section ref={sectionRef} className="hero-section" aria-label="Introduction">
       {/* Slow, ambient animated atmospheric background specifically for the Hero */}
-      <div className="hero-ambient" aria-hidden="true">
+      <div
+        className={`hero-ambient${isAmbientPaused ? ' hero-ambient-paused' : ''}`}
+        aria-hidden="true"
+      >
         <div className="hero-aura hero-aura-primary" />
         <div className="hero-aura hero-aura-secondary" />
         <div className="hero-aura hero-aura-tertiary" />

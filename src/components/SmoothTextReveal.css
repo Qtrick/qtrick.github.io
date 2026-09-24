@@ -17,32 +17,28 @@
 .reveal-char {
   display: inline-block;
   vertical-align: baseline;
-  will-change: opacity, filter, transform;
 }
 
 .reveal-char.is-animating {
   opacity: 0;
-  filter: blur(2px);
   transform: translateY(1.5px);
+  will-change: opacity, transform;
   animation: smoothCharFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: var(--char-delay, 0s);
 }
 
 .reveal-char.is-static {
   opacity: 1;
-  filter: none;
   transform: none;
 }
 
 @keyframes smoothCharFadeIn {
   0% {
     opacity: 0;
-    filter: blur(2px);
     transform: translateY(1.5px);
   }
   100% {
     opacity: 1;
-    filter: blur(0px);
     transform: translateY(0);
   }
 }
@@ -50,8 +46,8 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal-char.is-animating {
     opacity: 1 !important;
-    filter: none !important;
     transform: none !important;
     animation: none !important;
+    will-change: auto !important;
   }
 }

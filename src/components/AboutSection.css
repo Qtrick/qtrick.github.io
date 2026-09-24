@@ -32,11 +32,11 @@
   max-width: min(100%, 68ch);
 }
 
-/* Smooth Fade Reveal Sequence: About heading -> Bio 1 -> Bio 2 */
+/* Smooth Fade Reveal Sequence: About heading -> Bio 1 -> Bio 2.
+   Opacity-only so scrolling never triggers layout or paint. */
 .about-section .reveal-item {
   opacity: 0;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity;
 }
 
 .about-section.is-revealed .reveal-item {

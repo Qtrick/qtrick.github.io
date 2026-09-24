@@ -1,4 +1,4 @@
-/* Work Section Styles - Simple Elegant List */
+/* Work Section Styles - Side-by-Side Projects */
 
 .work-section {
   padding: clamp(2.5rem, 5vh + 1rem, 4.5rem) 0 clamp(2rem, 3.5vh + 0.75rem, 3.5rem);
@@ -18,9 +18,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 3.5vh + 0.75rem, 3.25rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: start;
 }
 
 .project-item {
@@ -28,6 +29,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  min-width: 0;
 }
 
 .project-item-header {
@@ -85,13 +87,13 @@
   transform: translateY(-1px);
 }
 
-/* Calm, Deliberate Reveal Sequence: Work heading -> PreBase -> Coreside */
+/* Calm Reveal Sequence: Work heading first, then both projects appear together.
+   Opacity + transform only so reveals composite without repainting. */
 .work-section .reveal-item {
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
     transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
 }
 
 .work-section.is-revealed .work-title-item {
@@ -100,16 +102,11 @@
   transition-delay: 0ms;
 }
 
-.work-section.is-revealed .project-item-1 {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 350ms;
-}
-
+.work-section.is-revealed .project-item-1,
 .work-section.is-revealed .project-item-2 {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 700ms;
+  transition-delay: 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -126,6 +123,7 @@
   }
 
   .project-list {
+    grid-template-columns: 1fr;
     gap: 1.875rem;
   }
 }

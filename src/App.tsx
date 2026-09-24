@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { siteContent } from './content/siteContent';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -14,14 +14,28 @@ export const App: React.FC = () => {
     return 'light';
   });
 
+  // Strictly sequential entrance cascade, one stage after another:
+  // intro hero letters -> Work title -> both projects together -> About -> Footer.
+  // Each stage becomes eligible only after the previous stage's animation has
+  // finished, regardless of scroll position, so reveals never overlap.
+  // Work entrance: title (0ms) + projects (300ms delay + 1100ms duration).
+  const WORK_ANIMATION_MS = 1400;
+  // Footer follows shortly after About starts fading in.
+  const ABOUT_LEAD_MS = 1000;
+  // Hero letter-by-letter entrance completes just before this fires.
+  const HERO_ANIMATION_MS = 2850;
+
   // Deterministic top-to-bottom sequence gating:
   // 1-5: Header & Hero animate on mount
-  // After hero settles (~700ms), Work is eligible to reveal
+  // After hero letters finish, Work is eligible to reveal
   const [isHeroDone, setIsHeroDone] = useState(false);
-  // When Work reveals, About becomes eligible to reveal
+  // After Work's entrance finishes, About becomes eligible to reveal
   const [isWorkRevealed, setIsWorkRevealed] = useState(false);
-  // When About reveals, Footer reveals
+  // Shortly after About starts revealing, Footer reveals
   const [isAboutRevealed, setIsAboutRevealed] = useState(false);
+
+  const workTimer = useRef<number | null>(null);
+  const aboutTimer = useRef<number | null>(null);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -45,23 +59,50 @@ export const App: React.FC = () => {
     }
 
     // Hero strictly sequential letter-by-letter entrance completes smoothly
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setIsHeroDone(true);
-    }, 2850);
+    }, HERO_ANIMATION_MS);
 
-    return () => clearTimeout(timer);
+    return () => window.clearTimeout(timer);
   }, []);
+
+  // Clear pending cascade timers on unmount
+  useEffect(() => {
+    return () => {
+      if (workTimer.current !== null) window.clearTimeout(workTimer.current);
+      if (aboutTimer.current !== null) window.clearTimeout(aboutTimer.current);
+    };
+  }, []);
+
+  const isReducedMotion = () =>
+    typeof window !== 'undefined' &&
+    !!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   const handleWorkRevealed = () => {
-    setIsWorkRevealed(true);
+    // About waits until both projects have finished appearing together.
+    if (workTimer.current !== null) return;
+    if (isReducedMotion()) {
+      setIsWorkRevealed(true);
+      return;
+    }
+    workTimer.current = window.setTimeout(() => {
+      setIsWorkRevealed(true);
+    }, WORK_ANIMATION_MS);
   };
 
   const handleAboutRevealed = () => {
-    setIsAboutRevealed(true);
+    if (aboutTimer.current !== null) return;
+    if (isReducedMotion()) {
+      setIsAboutRevealed(true);
+      return;
+    }
+    aboutTimer.current = window.setTimeout(() => {
+      setIsAboutRevealed(true);
+    }, ABOUT_LEAD_MS);
   };
 
   return (
@@ -92,7 +133,7 @@ export const App: React.FC = () => {
           subline={siteContent.hero.subline}
         />
 
-        {/* 6-8: Work Section (Heading -> PreBase -> Coreside) */}
+        {/* 6-7: Work Section (Heading -> both projects together) */}
         <WorkSection
           sectionTitle={siteContent.work.sectionTitle}
           projects={siteContent.work.projects}
@@ -100,7 +141,7 @@ export const App: React.FC = () => {
           onRevealed={handleWorkRevealed}
         />
 
-        {/* 9-11: About Section (Heading -> Bio 1 -> Bio 2 with outside-of-class interests) */}
+        {/* 8-10: About Section (Heading -> Bio 1 -> Bio 2 with outside-of-class interests) */}
         <AboutSection
           sectionTitle={siteContent.about.sectionTitle}
           bio={siteContent.about.bio}
@@ -109,7 +150,7 @@ export const App: React.FC = () => {
         />
       </main>
 
-      {/* 12. Minimal Footer */}
+      {/* 11. Minimal Footer */}
       <Footer
         copyright={siteContent.footer.copyright}
         isRevealed={isAboutRevealed}

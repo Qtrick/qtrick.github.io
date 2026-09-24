@@ -1,14 +1,15 @@
 /* Minimal Header Styles */
 
 .site-header {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 100;
   background: var(--bg-glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-normal);
   animation: headerEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;

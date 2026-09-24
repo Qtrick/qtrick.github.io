@@ -22,9 +22,18 @@
 .hero-aura {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
+  /* Radial gradients already fade to transparent, so no blur filter is needed.
+     A large blur here forces the browser to repaint huge layers every frame. */
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   pointer-events: none;
+}
+
+/* JS pauses the ambient drift when the hero is off-screen so scrolling
+   through Work/About never competes with background repaints. */
+.hero-ambient-paused .hero-aura {
+  animation-play-state: paused !important;
 }
 
 .hero-aura-primary {
