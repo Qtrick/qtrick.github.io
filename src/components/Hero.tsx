@@ -2,23 +2,34 @@ import React from 'react';
 import './Hero.css';
 
 interface HeroProps {
-  name: string;
+  greeting: string;
   headline: string;
   subline: string;
-  links: Array<{ label: string; href: string; external?: boolean }>;
+  workLink: {
+    label: string;
+    href: string;
+  };
 }
 
 export const Hero: React.FC<HeroProps> = ({
-  name,
+  greeting,
   headline,
   subline,
-  links,
+  workLink,
 }) => {
   return (
     <section className="hero-section" aria-label="Introduction">
+      {/* Slow, ambient animated atmospheric background specifically for the Hero */}
+      <div className="hero-ambient" aria-hidden="true">
+        <div className="hero-aura hero-aura-primary" />
+        <div className="hero-aura hero-aura-secondary" />
+        <div className="hero-aura hero-aura-tertiary" />
+        <div className="hero-grain" />
+      </div>
+
       <div className="site-wrapper hero-container">
-        {/* Step 2: David Fan name */}
-        <p className="hero-name hero-animate-1">{name}</p>
+        {/* Step 2: "Hi, I'm David." */}
+        <p className="hero-greeting hero-animate-1">{greeting}</p>
 
         {/* Step 3: Main personal headline */}
         <h1 className="hero-headline hero-animate-2">{headline}</h1>
@@ -26,19 +37,11 @@ export const Hero: React.FC<HeroProps> = ({
         {/* Step 4: Supporting sentence */}
         <p className="hero-subline hero-animate-3">{subline}</p>
 
-        {/* Step 5: Hero action links */}
+        {/* Step 5: Work navigation */}
         <div className="hero-actions hero-animate-4">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.external ? '_blank' : undefined}
-              rel={link.external ? 'noopener noreferrer' : undefined}
-              className="hero-link"
-            >
-              {link.label}
-            </a>
-          ))}
+          <a href={workLink.href} className="hero-link">
+            {workLink.label}
+          </a>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 /* Compact About Section Styles */
 
 .about-section {
-  padding: clamp(2.5rem, 5vh + 1rem, 4.5rem) 0 clamp(2rem, 3.5vh + 0.75rem, 3.5rem);
+  padding: clamp(2.5rem, 5vh + 1rem, 4.5rem) 0 clamp(2.5rem, 4vh + 1rem, 4rem);
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -21,8 +21,7 @@
 .about-bio-text {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.75rem, 1.2vh, 1.125rem);
-  margin-bottom: clamp(1.5rem, 2.2vh, 2.25rem);
+  gap: clamp(0.875rem, 1.4vh, 1.25rem);
 }
 
 .about-paragraph {
@@ -33,76 +32,12 @@
   max-width: min(100%, 68ch);
 }
 
-.about-links-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: clamp(1rem, 1.8vw, 1.75rem);
-  padding-top: clamp(1.25rem, 2vh, 1.75rem);
-  border-top: 1px solid var(--border-subtle);
-}
-
-.about-social-links {
-  display: flex;
-  align-items: center;
-  gap: clamp(1.25rem, 1.8vw, 1.75rem);
-  flex-wrap: wrap;
-}
-
-.about-link {
-  font-size: clamp(0.9375rem, 0.35vw + 0.85rem, 1.125rem);
-  font-weight: 500;
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: opacity var(--transition-fast);
-}
-
-.about-link:hover {
-  opacity: 0.7;
-}
-
-.about-email-wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.email-mailto-link {
-  font-size: clamp(0.875rem, 0.35vw + 0.78rem, 1.05rem);
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.email-mailto-link:hover {
-  color: var(--text-primary);
-}
-
-.email-copy-btn {
-  font-size: clamp(0.75rem, 0.2vw + 0.7rem, 0.875rem);
-  font-weight: 500;
-  color: var(--text-muted);
-  background: var(--tag-bg);
-  border: 1px solid var(--tag-border);
-  border-radius: var(--radius-sm);
-  padding: 0.25rem 0.6rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.email-copy-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-/* Staggered Reveal Sequence: About heading -> About text -> Links */
+/* Staggered Reveal Sequence: About heading -> Bio 1 -> Bio 2 (700ms duration) */
 .about-section .reveal-item {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(12px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -112,16 +47,16 @@
   transition-delay: 0ms;
 }
 
-.about-section.is-revealed .about-text-item {
+.about-section.is-revealed .about-paragraph-1 {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 100ms;
+  transition-delay: 180ms;
 }
 
-.about-section.is-revealed .about-links-item {
+.about-section.is-revealed .about-paragraph-2 {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 200ms;
+  transition-delay: 360ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -135,11 +70,5 @@
 @media (max-width: 640px) {
   .about-section {
     padding: 2.5rem 0 2rem;
-  }
-
-  .about-links-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
   }
 }

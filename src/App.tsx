@@ -16,7 +16,7 @@ export const App: React.FC = () => {
 
   // Deterministic top-to-bottom sequence gating:
   // 1-5: Header & Hero animate on mount
-  // After hero settles (~380ms), Work is eligible to reveal
+  // After hero settles (~700ms), Work is eligible to reveal
   const [isHeroDone, setIsHeroDone] = useState(false);
   // When Work reveals, About becomes eligible to reveal
   const [isWorkRevealed, setIsWorkRevealed] = useState(false);
@@ -44,10 +44,10 @@ export const App: React.FC = () => {
       return;
     }
 
-    // Hero entrance completes in ~380ms (Name 80ms -> Headline 160ms -> Subline 240ms -> Links 320ms)
+    // Hero entrance completes deliberately in ~700ms
     const timer = setTimeout(() => {
       setIsHeroDone(true);
-    }, 380);
+    }, 700);
 
     return () => clearTimeout(timer);
   }, []);
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="portfolio-app">
-      {/* Living Atmospheric Background */}
+      {/* Calm base background for the page */}
       <AmbientBackground />
 
       {/* Accessible skip link */}
@@ -74,22 +74,23 @@ export const App: React.FC = () => {
         Skip to main content
       </a>
 
-      {/* 1. Global Minimal Header */}
+      {/* 1. Global Minimal Header with icons-only social and email */}
       <Header
-        ownerName={siteContent.hero.name}
+        ownerName={siteContent.ownerName}
         navigation={siteContent.navigation}
+        social={siteContent.social}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
 
       {/* Main Content Sections */}
       <main id="main-content" tabIndex={-1}>
-        {/* 2-5: Hero (David Fan -> Headline -> Subline -> Links) */}
+        {/* 2-5: Hero (Hi, I'm David. -> Headline -> Subline -> Work Link) with living ambient background */}
         <Hero
-          name={siteContent.hero.name}
+          greeting={siteContent.hero.greeting}
           headline={siteContent.hero.headline}
           subline={siteContent.hero.subline}
-          links={siteContent.hero.links}
+          workLink={siteContent.hero.workLink}
         />
 
         {/* 6-8: Work Section (Heading -> PreBase -> Coreside) */}
@@ -100,12 +101,10 @@ export const App: React.FC = () => {
           onRevealed={handleWorkRevealed}
         />
 
-        {/* 9-11: About Section (Heading -> Bio -> Links/Email) */}
+        {/* 9-11: About Section (Heading -> Bio 1 -> Bio 2 with outside-of-class interests) */}
         <AboutSection
           sectionTitle={siteContent.about.sectionTitle}
           bio={siteContent.about.bio}
-          email={siteContent.about.email}
-          links={siteContent.about.links}
           enabled={isWorkRevealed}
           onRevealed={handleAboutRevealed}
         />

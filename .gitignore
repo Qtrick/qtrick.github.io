@@ -18,3 +18,4 @@ pnpm-debug.log*
 # Environment and OS
 .DS_Store
 *.local
+.chrome_tmp/

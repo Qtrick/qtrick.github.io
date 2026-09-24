@@ -7,11 +7,11 @@
   width: 100%;
   z-index: 100;
   background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-normal);
-  animation: headerEnter 0.5s var(--ease-out) forwards;
+  animation: headerEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes headerEnter {
@@ -33,32 +33,43 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: clamp(52px, 3vh + 30px, 68px);
+  min-height: clamp(54px, 3vh + 32px, 68px);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2vw, 2rem);
 }
 
 .site-logo {
-  font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.125rem);
+  font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.0625rem);
   font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
 }
 
 .header-nav {
   display: flex;
+  align-items: center;
 }
 
 .nav-list {
   display: flex;
   list-style: none;
-  gap: clamp(1rem, 1.8vw, 1.75rem);
+  gap: clamp(0.875rem, 1.5vw, 1.5rem);
   align-items: center;
   margin: 0;
   padding: 0;
 }
 
 .nav-link {
-  font-size: clamp(0.875rem, 0.25vw + 0.8rem, 1.05rem);
+  font-size: clamp(0.85rem, 0.25vw + 0.78rem, 0.95rem);
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 450;
@@ -69,16 +80,88 @@
   color: var(--text-primary);
 }
 
-.external-arrow {
-  font-size: clamp(0.75rem, 0.2vw + 0.7rem, 0.875rem);
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.2vw, 1.5rem);
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+/* Email Display in Menu Bar */
+.header-email-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: clamp(0.8125rem, 0.25vw + 0.75rem, 0.9rem);
+}
+
+.header-email-label {
+  color: var(--text-muted);
+  font-weight: 450;
+}
+
+.header-email-link {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.header-email-link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.header-copy-btn {
+  font-size: 0.725rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1.2;
+}
+
+.header-copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* Action Icons: GitHub, LinkedIn, Theme Toggle */
+.header-action-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.header-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.header-icon-link:hover {
+  color: var(--text-primary);
+  transform: translateY(-1px);
 }
 
 .theme-toggle-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: clamp(28px, 1.2vw + 24px, 34px);
-  height: clamp(28px, 1.2vw + 24px, 34px);
+  width: 32px;
+  height: 32px;
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -98,12 +181,46 @@
   }
 }
 
-@media (max-width: 480px) {
-  .nav-list {
-    gap: 0.875rem;
+/* Mobile Breakpoint Adjustments */
+@media (max-width: 680px) {
+  .header-inner {
+    flex-wrap: wrap;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    row-gap: 0.4rem;
   }
 
-  .nav-link {
-    font-size: 0.8125rem;
+  .header-left {
+    gap: 1rem;
+  }
+
+  .header-right {
+    gap: 0.75rem;
+  }
+
+  .header-email-group {
+    font-size: 0.775rem;
+  }
+
+  .header-email-link {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .header-inner {
+    justify-content: space-between;
+  }
+
+  .header-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--border-subtle);
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ProjectItem } from '../types';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { GitHubIcon, GlobeIcon } from './Icons';
 import './WorkSection.css';
 
 interface WorkSectionProps {
@@ -43,17 +44,36 @@ export const WorkSection: React.FC<WorkSectionProps> = ({
                   <span className="project-descriptor">{project.descriptor}</span>
                 )}
               </div>
+
               <p className="project-description">{project.description}</p>
-              <div className="project-link-row">
+
+              <div
+                className="project-icon-links"
+                aria-label={`${project.name} project links`}
+              >
                 <a
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="project-github-link"
-                  aria-label={`View ${project.name} repository on GitHub (opens in new tab)`}
+                  className="project-icon-link"
+                  aria-label={`${project.name} GitHub repository (opens in new tab)`}
+                  title={`${project.name} GitHub repository`}
                 >
-                  GitHub ↗
+                  <GitHubIcon size={18} />
                 </a>
+
+                {project.websiteUrl && (
+                  <a
+                    href={project.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-icon-link"
+                    aria-label={`${project.name} website (opens in new tab)`}
+                    title={`${project.name} website`}
+                  >
+                    <GlobeIcon size={18} />
+                  </a>
+                )}
               </div>
             </li>
           ))}

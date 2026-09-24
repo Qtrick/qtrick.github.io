@@ -3,6 +3,7 @@ export interface ProjectItem {
   name: string;
   description: string;
   githubUrl: string;
+  websiteUrl?: string;
   descriptor?: string;
 }
 
@@ -11,10 +12,10 @@ export interface NavItem {
   href: string;
 }
 
-export interface SocialLink {
-  label: string;
-  href: string;
-  icon: 'github' | 'linkedin' | 'mail';
+export interface SocialLinks {
+  github: string;
+  linkedin: string;
+  email: string;
 }
 
 export interface SiteContent {
@@ -24,12 +25,17 @@ export interface SiteContent {
     author: string;
     url: string;
   };
+  ownerName: string;
   navigation: NavItem[];
+  social: SocialLinks;
   hero: {
-    name: string;
+    greeting: string;
     headline: string;
     subline: string;
-    links: Array<{ label: string; href: string; external?: boolean }>;
+    workLink: {
+      label: string;
+      href: string;
+    };
   };
   work: {
     sectionTitle: string;
@@ -38,8 +44,6 @@ export interface SiteContent {
   about: {
     sectionTitle: string;
     bio: string[];
-    email: string;
-    links: SocialLink[];
   };
   footer: {
     copyright: string;

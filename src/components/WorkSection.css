@@ -55,36 +55,42 @@
   font-size: clamp(0.9375rem, 0.4vw + 0.82rem, 1.15rem);
   color: var(--text-secondary);
   line-height: 1.62;
-  margin: 0 0 clamp(0.6rem, 1vh, 0.85rem) 0;
+  margin: 0 0 clamp(0.65rem, 1.1vh, 0.9rem) 0;
   max-width: min(100%, 68ch);
 }
 
-.project-link-row {
+/* Project Action Icon Links */
+.project-icon-links {
   display: flex;
   align-items: center;
+  gap: 0.6rem;
 }
 
-.project-github-link {
-  font-size: clamp(0.875rem, 0.3vw + 0.8rem, 1.05rem);
-  font-weight: 500;
-  color: var(--text-primary);
-  text-decoration: none;
-  padding-bottom: 1px;
-  border-bottom: 1px solid var(--border-strong);
+.project-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-secondary);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
-.project-github-link:hover {
-  border-bottom-color: var(--text-primary);
-  opacity: 0.75;
+.project-icon-link:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
 }
 
-/* Deterministic Reveal Sequence: Work heading -> PreBase -> Coreside */
+/* Deterministic Reveal Sequence: Work heading -> PreBase -> Coreside (700ms duration) */
 .work-section .reveal-item {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(12px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -97,13 +103,13 @@
 .work-section.is-revealed .project-item-1 {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 100ms;
+  transition-delay: 180ms;
 }
 
 .work-section.is-revealed .project-item-2 {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 220ms;
+  transition-delay: 360ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

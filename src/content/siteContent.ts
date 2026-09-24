@@ -9,21 +9,27 @@ export const siteContent: SiteContent = {
     url: 'https://qtrick.github.io',
   },
 
+  ownerName: 'David Fan',
+
   navigation: [
     { label: 'Work', href: '#work' },
     { label: 'About', href: '#about' },
-    { label: 'GitHub', href: 'https://github.com/Qtrick' },
   ],
 
+  social: {
+    github: 'https://github.com/Qtrick',
+    linkedin: 'https://www.linkedin.com/in/david-fan-3a5a66313/',
+    email: 'dfan@umass.edu',
+  },
+
   hero: {
-    name: 'David Fan',
+    greeting: "Hi, I'm David.",
     headline: "I'm a biology student at UMass Amherst who likes building things.",
     subline: "Right now, I'm working on PreBase and Coreside.",
-    links: [
-      { label: 'Work ↓', href: '#work' },
-      { label: 'GitHub ↗', href: 'https://github.com/Qtrick', external: true },
-      { label: 'LinkedIn ↗', href: 'https://www.linkedin.com/in/david-fan-3a5a66313/', external: true },
-    ],
+    workLink: {
+      label: 'Work ↓',
+      href: '#work',
+    },
   },
 
   work: {
@@ -34,6 +40,7 @@ export const siteContent: SiteContent = {
         name: 'PreBase',
         description: 'A codebase mapping IDE for seeing how software connects.',
         githubUrl: 'https://github.com/Qtrick/prebasecode',
+        websiteUrl: 'https://prebase.vercel.app',
       },
       {
         id: 'coreside',
@@ -49,20 +56,7 @@ export const siteContent: SiteContent = {
     sectionTitle: 'About',
     bio: [
       'I like figuring out how things work, then trying to build them myself.',
-      'Outside of software, I compete on the U.S. Wushu Team.',
-    ],
-    email: 'dfan@umass.edu',
-    links: [
-      {
-        label: 'GitHub',
-        href: 'https://github.com/Qtrick',
-        icon: 'github',
-      },
-      {
-        label: 'LinkedIn',
-        href: 'https://www.linkedin.com/in/david-fan-3a5a66313/',
-        icon: 'linkedin',
-      },
+      'Outside of class, I enjoy listening to classical music and doing volunteer work for local communities. I also compete on the U.S. Wushu Team.',
     ],
   },
 
@@ -70,4 +64,3 @@ export const siteContent: SiteContent = {
     copyright: 'David Fan · 2026',
   },
 };
-

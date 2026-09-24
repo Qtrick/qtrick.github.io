@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
-import { SocialLink } from '../types';
+import React from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import './AboutSection.css';
 
 interface AboutSectionProps {
   sectionTitle: string;
   bio: string[];
-  email: string;
-  links: SocialLink[];
   enabled?: boolean;
   onRevealed?: () => void;
 }
@@ -15,8 +12,6 @@ interface AboutSectionProps {
 export const AboutSection: React.FC<AboutSectionProps> = ({
   sectionTitle,
   bio,
-  email,
-  links,
   enabled = true,
   onRevealed,
 }) => {
@@ -24,17 +19,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     enabled,
     onReveal: onRevealed,
   });
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      window.location.href = `mailto:${email}`;
-    }
-  };
 
   return (
     <section
@@ -45,44 +29,19 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     >
       <div className="site-wrapper">
         <div className="about-container">
-          <h2 className="about-title reveal-item about-title-item">{sectionTitle}</h2>
+          <h2 className="about-title reveal-item about-title-item">
+            {sectionTitle}
+          </h2>
 
-          <div className="about-bio-text reveal-item about-text-item">
+          <div className="about-bio-text">
             {bio.map((paragraph, idx) => (
-              <p key={idx} className="about-paragraph">
+              <p
+                key={idx}
+                className={`about-paragraph reveal-item about-paragraph-${idx + 1}`}
+              >
                 {paragraph}
               </p>
             ))}
-          </div>
-
-          <div className="about-links-row reveal-item about-links-item">
-            <div className="about-social-links">
-              {links.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target={link.href.startsWith('http') ? '_blank' : undefined}
-                  rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="about-link"
-                >
-                  {link.label} ↗
-                </a>
-              ))}
-            </div>
-
-            <div className="about-email-wrapper">
-              <a href={`mailto:${email}`} className="email-mailto-link">
-                {email}
-              </a>
-              <button
-                type="button"
-                className="email-copy-btn"
-                onClick={handleCopyEmail}
-                aria-label="Copy email address to clipboard"
-              >
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-            </div>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-/* Living Atmospheric Background */
+/* Calm Base Page Atmosphere */
 
 .ambient-background {
   position: fixed;
@@ -11,75 +11,15 @@
   z-index: 0;
 }
 
-/* Layer 1: Base atmospheric ambient gradient mesh */
+/* Base static ambient gradient mesh for warmth and depth */
 .ambient-mesh {
   position: absolute;
-  top: -20%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: var(--ambient-mesh-base);
-  opacity: 0.88;
-  transition: opacity var(--transition-slow);
-}
-
-/* Layer 2 & 3: Slow-moving organic radiant auras */
-.ambient-aura {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  will-change: transform;
-  pointer-events: none;
-}
-
-/* Primary warm shifting aura */
-.ambient-aura-primary {
-  width: min(80vw, 840px);
-  height: min(80vw, 840px);
-  top: -5vh;
-  left: -8vw;
-  background: var(--ambient-aura-1);
-  animation: atmosphericDrift1 50s ease-in-out infinite alternate;
-}
-
-/* Secondary counter-drifting cool mineral aura */
-.ambient-aura-secondary {
-  width: min(75vw, 760px);
-  height: min(75vw, 760px);
-  top: 30vh;
-  right: -10vw;
-  background: var(--ambient-aura-2);
-  animation: atmosphericDrift2 62s ease-in-out infinite alternate;
-}
-
-@keyframes atmosphericDrift1 {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(60px, 40px, 0) scale(1.08);
-  }
-  66% {
-    transform: translate3d(25px, 80px, 0) scale(0.96);
-  }
-  100% {
-    transform: translate3d(-35px, 45px, 0) scale(1.04);
-  }
-}
-
-@keyframes atmosphericDrift2 {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(-50px, -35px, 0) scale(1.06);
-  }
-  66% {
-    transform: translate3d(-20px, 50px, 0) scale(0.94);
-  }
-  100% {
-    transform: translate3d(40px, -25px, 0) scale(1.05);
-  }
+  opacity: 0.55;
 }
 
 /* Fine-art micro-grain overlay for texture and elimination of digital banding */
@@ -90,16 +30,10 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 [data-theme='dark'] .ambient-grain {
-  opacity: 0.045;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ambient-aura {
-    animation: none !important;
-  }
+  opacity: 0.04;
 }
