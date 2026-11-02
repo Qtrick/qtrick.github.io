@@ -153,18 +153,20 @@ describe('David Fan Portfolio Site', () => {
   });
 
   describe('Work Section', () => {
-    it('renders simple project list for PreBase and Coreside', () => {
+    it('renders simple project list for PreBase CLI and Coreside', () => {
       render(<App />);
 
       expect(
-        screen.getByRole('heading', { level: 3, name: 'PreBase' })
+        screen.getByRole('heading', { level: 3, name: 'PreBase CLI' })
       ).toBeInTheDocument();
       expect(
         screen.getByRole('heading', { level: 3, name: 'Coreside' })
       ).toBeInTheDocument();
 
       expect(
-        screen.getByText('A codebase mapping IDE for seeing how software connects.')
+        screen.getByText(
+          'A local-first CLI for exploring codebase structure and Git history through interactive Network and Temporal graphs.'
+        )
       ).toBeInTheDocument();
       expect(
         screen.getByText(
@@ -176,28 +178,26 @@ describe('David Fan Portfolio Site', () => {
       expect(projectList.children.length).toBe(2);
     });
 
-    it('renders PreBase GitHub repo icon and website globe icon', () => {
+    it('renders PreBase CLI with GitHub repo icon only', () => {
       render(<App />);
 
       const prebaseGitHub = screen.getByRole('link', {
-        name: /PreBase GitHub repository/i,
+        name: /PreBase CLI GitHub repository/i,
       });
       expect(prebaseGitHub).toBeInTheDocument();
       expect(prebaseGitHub).toHaveAttribute(
         'href',
-        'https://github.com/Qtrick/prebasecode'
+        'https://github.com/Qtrick/prebase-cli/'
       );
       expect(prebaseGitHub).toHaveAttribute('target', '_blank');
 
-      const prebaseWebsite = screen.getByRole('link', {
-        name: /PreBase website/i,
-      });
-      expect(prebaseWebsite).toBeInTheDocument();
-      expect(prebaseWebsite).toHaveAttribute(
-        'href',
-        'https://prebase.vercel.app'
-      );
-      expect(prebaseWebsite).toHaveAttribute('target', '_blank');
+      // No website link for PreBase CLI
+      expect(
+        screen.queryByRole('link', { name: /PreBase CLI website/i })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('link', { name: /PreBase website/i })
+      ).not.toBeInTheDocument();
     });
 
     it('renders Coreside with GitHub repo icon only', () => {

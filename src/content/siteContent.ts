@@ -4,7 +4,7 @@ export const siteContent: SiteContent = {
   meta: {
     title: 'David Fan',
     description:
-      'David Fan is a biology student at UMass Amherst building PreBase and Coreside.',
+      'David Fan is a biology student at UMass Amherst building PreBase CLI and Coreside.',
     author: 'David Fan',
     url: 'https://qtrick.github.io',
   },
@@ -30,10 +30,10 @@ export const siteContent: SiteContent = {
     projects: [
       {
         id: 'prebase',
-        name: 'PreBase',
-        description: 'A codebase mapping IDE for seeing how software connects.',
-        githubUrl: 'https://github.com/Qtrick/prebasecode',
-        websiteUrl: 'https://prebase.vercel.app',
+        name: 'PreBase CLI',
+        description:
+          'A local-first CLI for exploring codebase structure and Git history through interactive Network and Temporal graphs.',
+        githubUrl: 'https://github.com/Qtrick/prebase-cli/',
       },
       {
         id: 'coreside',
